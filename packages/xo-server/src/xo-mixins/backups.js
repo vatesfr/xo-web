@@ -424,6 +424,9 @@ export default class {
       $defer.onFailure(cancel)
 
       const date = safeDateFormat(Date.now())
+      delta.vm.blocked_operations = {
+        start: 'Do not start this VM, clone it if you want to use it.'
+      }
       delta.vm.name_label += ` (${date})`
       delta.vm.other_config[TAG_SOURCE_VM] = uuid
       delta.vm.other_config[TAG_EXPORT_TIME] = date
@@ -834,7 +837,6 @@ export default class {
       delta.vm.tags.push('restored from backup')
 
       vm = (await xapi.importDeltaVm(delta, {
-        disableStartAfterImport: false,
         srId: sr !== undefined && sr._xapiId,
         mapVdisSrs,
       })).vm

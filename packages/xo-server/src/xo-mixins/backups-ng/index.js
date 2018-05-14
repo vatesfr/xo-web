@@ -199,7 +199,6 @@ const importers: $Dict<
 
     const { vm: newVm } = await xapi.importDeltaVm(delta, {
       detectBase: false,
-      disableStartAfterImport: false,
       srId: sr,
       // TODO: support mapVdisSrs
     })
@@ -306,6 +305,7 @@ const writeStream = async (
 //    - copy in delta mode: `Continuous Replication`
 //    - copy in full mode: `Disaster Recovery`
 //    - imported from backup: `restored from backup`
+// - start operation is blocked for copy in delta mode
 export default class BackupNg {
   _app: {
     createJob: ($Diff<BackupJob, {| id: string |}>) => Promise<BackupJob>,
@@ -981,28 +981,29 @@ export default class BackupNg {
               await this._deleteVms(xapi, oldVms)
             }
 
-            transferStart = Math.min(transferStart, Date.now())
-
-            const { vm } = await xapi.importDeltaVm(fork, {
-              disableStartAfterImport: false, // we'll take care of that
+            fork.vm = {
+              ...fork.vm,
+              blocked_operations: {
+                start:
+                  'Start operation for this vm is blocked, clone it if you want to use it.',
+              },
               name_label: `${metadata.vm.name_label} (${safeDateFormat(
                 metadata.timestamp
               )})`,
+              other_config: {
+                ...fork.vm.other_config,
+                'xo:backup:sr': srId,
+              },
+              tags: [...fork.vm.tags, 'Continuous Replication'],
+            }
+
+            transferStart = Math.min(transferStart, Date.now())
+
+            const { vm } = await xapi.importDeltaVm(fork, {
               srId: sr.$id,
             })
 
             transferEnd = Math.max(transferEnd, Date.now())
-
-            await Promise.all([
-              xapi.addTag(vm.$ref, 'Continuous Replication'),
-              xapi._updateObjectMapProperty(vm, 'blocked_operations', {
-                start:
-                  'Start operation for this vm is blocked, clone it if you want to use it.',
-              }),
-              xapi._updateObjectMapProperty(vm, 'other_config', {
-                'xo:backup:sr': srId,
-              }),
-            ])
 
             if (!deleteFirst) {
               await this._deleteVms(xapi, oldVms)
