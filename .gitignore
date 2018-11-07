@@ -9,6 +9,8 @@
 /packages/*/dist/
 /packages/*/node_modules/
 
+/@xen-orchestra/novnc/core/
+
 /packages/vhd-cli/src/commands/index.js
 
 /packages/xen-api/examples/node_modules/

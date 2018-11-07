@@ -1,23 +1,11 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import RFB from '@nraynaud/novnc/lib/rfb'
-import URL from 'url-parse'
+import RFB from '@xen-orchestra/novnc/core/rfb'
 import { createBackoff } from 'jsonrpc-websocket-client'
 import {
   enable as enableShortcuts,
   disable as disableShortcuts,
 } from 'shortcuts'
-
-const PROTOCOL_ALIASES = {
-  'http:': 'ws:',
-  'https:': 'wss:',
-}
-const fixProtocol = url => {
-  const protocol = PROTOCOL_ALIASES[url.protocol]
-  if (protocol) {
-    url.protocol = protocol
-  }
-}
 
 export default class NoVnc extends Component {
   static propTypes = {
@@ -28,26 +16,21 @@ export default class NoVnc extends Component {
   constructor (props) {
     super(props)
     this._rfb = null
-    this._retryGen = createBackoff(Infinity)
 
-    this._onUpdateState = (rfb, state) => {
-      if (state === 'normal') {
-        if (this._retryTimeout) {
-          clearTimeout(this._retryTimeout)
-          this._retryTimeout = undefined
-          this._retryGen = createBackoff(Infinity)
-        }
+    let retryGen = createBackoff(Infinity)
+    let retryTimeout
+    this._onConnected = () => {
+      if (retryTimeout !== undefined) {
+        clearTimeout(retryTimeout)
+        retryTimeout = undefined
+        retryGen = createBackoff(Infinity)
       }
-
-      if (state !== 'disconnected' || this.refs.canvas == null) {
-        return
+    }
+    this._onDisconnected = () => {
+      if (this.refs.canvas != null) {
+        clearTimeout(retryTimeout)
+        retryTimeout = setTimeout(this._connect, retryGen.next().value)
       }
-
-      clearTimeout(this._retryTimeout)
-      this._retryTimeout = setTimeout(
-        this._connect,
-        this._retryGen.next().value
-      )
     }
   }
 
@@ -82,39 +65,19 @@ export default class NoVnc extends Component {
       return
     }
 
-    const url = new URL(this.props.url)
-    fixProtocol(url)
-
-    const isSecure = url.protocol === 'wss:'
-
     const { onClipboardChange } = this.props
-    const rfb = (this._rfb = new RFB({
-      encrypt: isSecure,
-      target: this.refs.canvas,
-      onClipboard:
-        onClipboardChange &&
-        ((_, text) => {
-          onClipboardChange(text)
-        }),
-      onUpdateState: this._onUpdateState,
-    }))
+    const rfb = (this._rfb = new RFB(this.refs.canvas, this.props.url))
 
-    // remove leading slashes from the path
-    //
-    // a leading slassh will be added by noVNC
-    const clippedPath = url.pathname.replace(/^\/+/, '')
+    if (onClipboardChange !== undefined) {
+      rfb.addEventListener('clipboard', ({ text }) => {
+        onClipboardChange(text)
+      })
+    }
 
-    // a port is required
-    //
-    // if not available from the URL, use the default ones
-    const port = url.port || (isSecure ? 443 : 80)
+    rfb.addEventListener('connect', this._onConnected)
+    rfb.addEventListener('disconnect', this._onDisconnected)
+    rfb.addEventListener('error', console.error.bind(console, 'error'))
 
-    rfb.connect(
-      url.hostname,
-      port,
-      null,
-      clippedPath
-    )
     disableShortcuts()
   }
 
@@ -142,8 +105,7 @@ export default class NoVnc extends Component {
         activeElement.blur()
       }
 
-      rfb.get_keyboard().grab()
-      rfb.get_mouse().grab()
+      rfb.focus()
 
       disableShortcuts()
     }
@@ -152,8 +114,7 @@ export default class NoVnc extends Component {
   _unfocus = () => {
     const rfb = this._rfb
     if (rfb) {
-      rfb.get_keyboard().ungrab()
-      rfb.get_mouse().ungrab()
+      rfb.blur()
 
       enableShortcuts()
     }

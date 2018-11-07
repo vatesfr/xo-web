@@ -1,0 +1,25 @@
+{
+  "author": "Julien Fontanet <julien.fontanet@vates.fr>",
+  "bugs": "https://github.com/vatesfr/xen-orchestra/issues",
+  "description": "@novnc/novnc/core/rfb.js as a CommonJS module",
+  "devDependencies": {
+    "@novnc/novnc": "^1.0.0",
+    "rollup": "^0.66.6",
+    "rollup-plugin-node-resolve": "^3.4.0"
+  },
+  "files": [
+    "core/"
+  ],
+  "homepage": "https://github.com/vatesfr/xen-orchestra/tree/master/@xen-orchestra/novnc",
+  "name": "@xen-orchestra/novnc",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vatesfr/xen-orchestra.git"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "prepublishOnly": "yarn run build"
+  },
+  "version": "0.0.0"
+}

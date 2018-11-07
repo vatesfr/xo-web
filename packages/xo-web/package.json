@@ -30,9 +30,9 @@
     "node": ">=6"
   },
   "devDependencies": {
-    "@nraynaud/novnc": "0.6.1",
     "@xen-orchestra/cron": "^1.0.3",
     "@xen-orchestra/defined": "^0.0.0",
+    "@xen-orchestra/novnc": "^0.0.0",
     "ansi_up": "^3.0.0",
     "asap": "^2.0.6",
     "babel-core": "^6.26.0",

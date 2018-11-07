@@ -6,6 +6,7 @@
 
 - [Legacy Backup] Restore and File restore functionalities moved to the Backup NG view [#3499](https://github.com/vatesfr/xen-orchestra/issues/3499) (PR [#3610](https://github.com/vatesfr/xen-orchestra/pull/3610))
 - [Backup NG logs] Display warning in case of missing VMs instead of a ghosts VMs tasks (PR [#3647](https://github.com/vatesfr/xen-orchestra/pull/3647))
+- Update noVNC to 1.0.0 [3080](https://github.com/vatesfr/xen-orchestra/issues/3080) (PR [#3152](https://github.com/vatesfr/xen-orchestra/pull/3152))
 
 ### Bug fixes
 
