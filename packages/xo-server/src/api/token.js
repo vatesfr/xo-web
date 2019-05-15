@@ -34,3 +34,21 @@ delete_.permission = 'admin'
 delete_.params = {
   token: { type: 'string' },
 }
+
+// -------------------------------------------------------------------
+
+export async function deleteAll() {
+  await this.deleteAuthenticationTokens({
+    filter: {
+      user_id: this.session.get('user_id'),
+      id: {
+        __not: this.session.get('authenticationToken'),
+      },
+    },
+  })
+}
+
+deleteAll.description =
+  'delete all tokens of the current user except the current one'
+
+deleteAll.permission = ''
