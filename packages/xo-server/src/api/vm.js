@@ -665,15 +665,16 @@ export const clone = defer(async function(
   await checkPermissionOnSrs.call(this, vm)
   const xapi = this.getXapi(vm)
 
-  const { $id: cloneId } = await xapi.cloneVm(vm._xapiRef, {
+  const xapiVm = await xapi.cloneVm(vm._xapiRef, {
     nameLabel: name,
     fast: !fullCopy,
   })
-  $defer.onFailure(() => xapi.deleteVm(cloneId))
+  $defer.onFailure(() => xapi.deleteVm(xapiVm.$id))
+  await xapiVm.update_other_config('owner', this.user.id)
 
   const isAdmin = this.user.permission === 'admin'
   if (!isAdmin) {
-    await this.addAcl(this.user.id, cloneId, 'admin')
+    await this.addAcl(this.user.id, xapiVm.$id, 'admin')
   }
 
   if (vm.resourceSet !== undefined) {
@@ -684,7 +685,7 @@ export const clone = defer(async function(
     )
   }
 
-  return cloneId
+  return xapiVm.$id
 })
 
 clone.params = {
@@ -706,19 +707,26 @@ export async function copy({ compress, name: nameLabel, sr, vm }) {
       await checkPermissionOnSrs.call(this, vm)
     }
 
-    return this.getXapi(vm)
-      .copyVm(vm._xapiId, sr._xapiId, {
-        nameLabel,
-      })
-      .then(vm => vm.$id)
-  }
-
-  return this.getXapi(vm)
-    .remoteCopyVm(vm._xapiId, this.getXapi(sr), sr._xapiId, {
-      compress,
+    const xapiVm = await this.getXapi(vm).copyVm(vm._xapiId, sr._xapiId, {
       nameLabel,
     })
-    .then(({ vm }) => vm.$id)
+    await xapiVm.update_other_config('owner', this.user.id)
+
+    return xapiVm.$id
+  }
+
+  const { vm: xapiVm } = await this.getXapi(vm).remoteCopyVm(
+    vm._xapiId,
+    this.getXapi(sr),
+    sr._xapiId,
+    {
+      compress,
+      nameLabel,
+    }
+  )
+  await xapiVm.update_other_config('owner', this.user.id)
+
+  return xapiVm.$id
 }
 
 copy.params = {
