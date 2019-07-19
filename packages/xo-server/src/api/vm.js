@@ -150,6 +150,8 @@ export async function create(params) {
   }
 
   const xapiVm = await xapi.createVm(template._xapiId, params, checkLimits)
+  await xapiVm.update_other_config('owner', user.id)
+
   const vm = xapi.xo.addObject(xapiVm)
 
   if (resourceSet) {

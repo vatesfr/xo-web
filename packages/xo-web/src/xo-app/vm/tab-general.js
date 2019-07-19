@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
 import React from 'react'
 import HomeTags from 'home-tags'
-import renderXoItem from 'render-xo-item'
+import renderXoItem, { User } from 'render-xo-item'
 import Tooltip from 'tooltip'
 import { addTag, editVm, removeTag } from 'xo'
 import { BlockLink } from 'link'
@@ -19,6 +19,7 @@ import {
   createGetObjectsOfType,
   createGetVmLastShutdownTime,
   createSelector,
+  isAdmin,
 } from 'selectors'
 import {
   connectStore,
@@ -48,6 +49,7 @@ export default connectStore(() => {
   )
 
   return {
+    isAdmin,
     lastShutdownTime: createGetVmLastShutdownTime(),
     tasks: createGetObjectsOfType('task')
       .pick(
@@ -63,6 +65,7 @@ export default connectStore(() => {
   }
 })(
   ({
+    isAdmin,
     lastShutdownTime,
     statsOverview,
     tasks,
@@ -78,6 +81,7 @@ export default connectStore(() => {
       installTime,
       memory,
       os_version: osVersion,
+      other,
       power_state: powerState,
       startTime,
       tags,
@@ -209,6 +213,18 @@ export default connectStore(() => {
             </BlockLink>
           </Col>
         </Row>
+        {isAdmin && other.owner !== undefined && (
+          <Row className='text-xs-center'>
+            <Col>
+              {_('keyValue', {
+                key: _('owner'),
+                value: (
+                  <User id={other.owner} link={process.env.XOA_PLAN > 2} />
+                ),
+              })}
+            </Col>
+          </Row>
+        )}
         {!xenTools && powerState === 'Running' && (
           <Row className='text-xs-center'>
             <Col>

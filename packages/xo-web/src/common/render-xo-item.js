@@ -12,7 +12,7 @@ import Tooltip from './tooltip'
 import { addSubscriptions, connectStore, formatSize } from './utils'
 import { createGetObject, createSelector } from './selectors'
 import { FormattedDate } from 'react-intl'
-import { isSrWritable, subscribeRemotes } from './xo'
+import { isSrWritable, subscribeRemotes, subscribeUsers } from './xo'
 
 // ===================================================================
 
@@ -388,6 +388,40 @@ export const Vgpu = connectStore(() => ({
 
 Vgpu.propTypes = {
   vgpu: PropTypes.object.isRequired,
+}
+
+// ===================================================================
+
+export const User = decorate([
+  addSubscriptions(({ id }) => ({
+    user: cb => subscribeUsers(users => cb(find(users, { id }))),
+  })),
+  ({ id, user, link, newTab }) => {
+    if (user === undefined) {
+      return unknowItem(id, 'user')
+    }
+
+    return (
+      <LinkWrapper
+        link={link}
+        newTab={newTab}
+        to={`/settings/acls?s=subject:id:${id}`}
+      >
+        <Icon icon='user' /> {user.email}
+      </LinkWrapper>
+    )
+  },
+])
+
+User.propTypes = {
+  id: PropTypes.string.isRequired,
+  link: PropTypes.bool,
+  newTab: PropTypes.bool,
+}
+
+User.defaultProps = {
+  link: false,
+  newTab: false,
 }
 
 // ===================================================================

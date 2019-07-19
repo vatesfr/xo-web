@@ -49,6 +49,7 @@ const messages = {
   backupJobs: 'Backup jobs',
   iscsiSessions:
     '({ nSessions, number }) iSCSI session{nSessions, plural, one {} other {s}}',
+  owner: 'Owner',
 
   // ----- Modals -----
   alertOk: 'OK',
