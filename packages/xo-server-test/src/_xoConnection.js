@@ -157,6 +157,52 @@ class XoConnection extends Xo {
     return find(await this.call('schedule.getAll'), predicate)
   }
 
+  async runBackupJob(jobId, scheduleId, { remotes, nExecutions = 1 }) {
+    for (let i = 0; i < nExecutions; i++) {
+      await xo.call('backupNg.runJob', { id: jobId, schedule: scheduleId })
+    }
+    const backups = {}
+    if (remotes !== undefined) {
+      const backupsByRemote = await xo.call('backupNg.listVmBackups', {
+        remotes,
+      })
+      forOwn(backupsByRemote, (backupsByVm, remoteId) => {
+        backups[remoteId] = []
+        forOwn(backupsByVm, vmBackups => {
+          vmBackups.forEach(
+            ({ jobId: backupJobId, scheduleId: backupScheduleId, id }) => {
+              if (jobId === backupJobId && scheduleId === backupScheduleId) {
+                this._tempResourceDisposers.push('backupNg.deleteVmBackup', {
+                  id,
+                })
+                backups[remoteId].push(id)
+              }
+            }
+          )
+        })
+      })
+      for (const id in this.objects.all) {
+        if (this.objects.all[id].other) {
+          const { 'xo:backup:schedule': snapshotSchedule } = this.objects.all[
+            id
+          ].other
+          if (snapshotSchedule === scheduleId) {
+            this._tempResourceDisposers.push('vm.delete', {
+              id,
+            })
+          }
+        }
+      }
+    }
+    return backups
+  }
+
+  async importVmBackup(params) {
+    const id = await xo.call('backupNg.importVmBackup', params)
+    this._tempResourceDisposers.push('vm.delete', { id })
+    return id
+  }
+
   async _cleanDisposers(disposers) {
     for (let n = disposers.length - 1; n > 0; ) {
       const params = disposers[n--]

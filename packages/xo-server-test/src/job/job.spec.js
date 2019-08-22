@@ -209,7 +209,7 @@ describe('job', () => {
     })
 
     it('runs a job', async () => {
-      jest.setTimeout(7e3)
+      jest.setTimeout(7e4)
       await xo.createTempServer(config.servers.default)
       const jobId = await xo.createTempJob(defaultJob)
       const snapshots = xo.objects.all[config.vms.default].snapshots

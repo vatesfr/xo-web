@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import { forOwn } from 'lodash'
 import { noSuchObject } from 'xo-common/api-errors'
 
 import config from '../_config'
@@ -9,6 +10,60 @@ import xo from '../_xoConnection'
 const DEFAULT_SCHEDULE = {
   name: 'scheduleTest',
   cron: '0 * * * * *',
+}
+
+const validateRootTask = (log, props) =>
+  expect(log).toMatchSnapshot({
+    end: expect.any(Number),
+    id: expect.any(String),
+    jobId: expect.any(String),
+    scheduleId: expect.any(String),
+    start: expect.any(Number),
+    ...props,
+  })
+
+const validateVmTask = (task, vmId, props = {}) => {
+  expect(task).toMatchSnapshot({
+    data: {
+      id: expect.any(String),
+    },
+    end: expect.any(Number),
+    id: expect.any(String),
+    message: expect.any(String),
+    start: expect.any(Number),
+    ...props,
+  })
+  expect(task.data.id).toBe(vmId)
+}
+
+const validateSnapshotTask = (task, props) =>
+  expect(task).toMatchSnapshot({
+    end: expect.any(Number),
+    id: expect.any(String),
+    result: expect.any(String),
+    start: expect.any(Number),
+    ...props,
+  })
+
+const validateExportTask = (task, srOrRemoteIds, props) => {
+  expect(task).toMatchSnapshot({
+    end: expect.any(Number),
+    id: expect.any(String),
+    message: expect.any(String),
+    start: expect.any(Number),
+    ...props,
+  })
+  expect(srOrRemoteIds).toContain(task.data.id)
+}
+
+const validateOperationTask = (task, props) => {
+  expect(task).toMatchSnapshot({
+    end: expect.any(Number),
+    id: expect.any(String),
+    message: expect.any(String),
+    start: expect.any(Number),
+    ...props,
+  })
 }
 
 describe('backupNg', () => {
@@ -174,7 +229,7 @@ describe('backupNg', () => {
       const vmIdWithoutDisks = await xo.createTempVm({
         name_label: 'XO Test Without Disks',
         name_description: 'Creating a vm without disks',
-        template: config.templates.default,
+        template: config.templates.templateWithoutDisks,
       })
 
       const scheduleTempId = randomId()
@@ -388,5 +443,158 @@ describe('backupNg', () => {
       start: expect.any(Number),
     })
     expect(vmTask.data.id).toBe(vmId)
+  })
+
+  test('execute three times a delta backup with 2 remotes, 2 as retention and 2 as fullInterval', async () => {
+    jest.setTimeout(6e4)
+    const {
+      vms: { default: defaultVm, vmToBackup = defaultVm },
+      remotes: { default: defaultRemote, remote1, remote2 = defaultRemote },
+      srs: { localSr, sharedSr },
+      servers: { default: defaultServer },
+    } = config
+
+    expect(vmToBackup).not.toBe(undefined)
+    expect(remote1).not.toBe(undefined)
+    expect(remote2).not.toBe(undefined)
+    expect(localSr).not.toBe(undefined)
+    expect(sharedSr).not.toBe(undefined)
+
+    await xo.createTempServer(defaultServer)
+    const { id: remoteId1 } = await xo.createTempRemote(remote1)
+    const { id: remoteId2 } = await xo.createTempRemote(remote2)
+    const remotes = [remoteId1, remoteId2]
+
+    const exportRetention = 2
+    const fullInterval = 2
+    const scheduleTempId = randomId()
+    const { id: jobId } = await xo.createTempBackupNgJob({
+      mode: 'delta',
+      remotes: {
+        id: {
+          __or: remotes,
+        },
+      },
+      schedules: {
+        [scheduleTempId]: DEFAULT_SCHEDULE,
+      },
+      settings: {
+        '': {
+          reportWhen: 'never',
+          fullInterval,
+        },
+        [remoteId1]: { deleteFirst: true },
+        [scheduleTempId]: { exportRetention },
+      },
+      vms: {
+        id: vmToBackup,
+      },
+    })
+
+    const schedule = await xo.getSchedule({ jobId })
+    expect(typeof schedule).toBe('object')
+
+    const nExecutions = 3
+    const backupsByRemote = await xo.runBackupJob(jobId, schedule.id, {
+      remotes,
+      nExecutions,
+    })
+    forOwn(backupsByRemote, backups =>
+      expect(backups.length).toBe(exportRetention)
+    )
+
+    const backupLogs = await xo.call('backupNg.getLogs', {
+      jobId,
+      scheduleId: schedule.id,
+    })
+    expect(backupLogs.length).toBe(nExecutions)
+
+    backupLogs.forEach(({ tasks, ...log }, key) => {
+      validateRootTask(log, {
+        data: {
+          mode: 'delta',
+          reportWhen: 'never',
+        },
+        message: 'backup',
+        status: 'success',
+      })
+
+      const numberOfTasks = {
+        export: 0,
+        merge: 0,
+        snapshot: 0,
+        transfer: 0,
+        vm: 0,
+      }
+      tasks.forEach(({ tasks, ...vmTask }) => {
+        if (vmTask.data !== undefined && vmTask.data.type === 'VM') {
+          validateVmTask(vmTask, vmToBackup, { status: 'success' })
+          numberOfTasks.vm++
+          tasks.forEach(({ tasks, ...subTask }) => {
+            if (subTask.message === 'snapshot') {
+              validateSnapshotTask(subTask, { status: 'success' })
+              numberOfTasks.snapshot++
+            }
+            if (subTask.message === 'export') {
+              validateExportTask(subTask, remotes, {
+                data: {
+                  id: expect.any(String),
+                  isFull: key % fullInterval === 0,
+                  type: 'remote',
+                },
+                status: 'success',
+              })
+              numberOfTasks.export++
+              let mergeTaskKey, transferTaskKey
+              tasks.forEach((operationTask, key) => {
+                if (
+                  operationTask.message === 'transfer' ||
+                  operationTask.message === 'merge'
+                ) {
+                  validateOperationTask(operationTask, {
+                    result: { size: expect.any(Number) },
+                    status: 'success',
+                  })
+                  if (operationTask.message === 'transfer') {
+                    mergeTaskKey = key
+                    numberOfTasks.merge++
+                  } else {
+                    transferTaskKey = key
+                    numberOfTasks.transfer++
+                  }
+                }
+              })
+              expect(
+                subTask.data.id === remoteId1
+                  ? mergeTaskKey > transferTaskKey
+                  : mergeTaskKey < transferTaskKey
+              ).toBe(true)
+            }
+          })
+        }
+      })
+      expect(numberOfTasks).toEqual({
+        export: 2,
+        merge: 2,
+        snapshot: 1,
+        transfer: 2,
+        vm: 1,
+      })
+    })
+
+    const vmBackupOnLocalSr = await xo.importVmBackup({
+      id: backupsByRemote[remoteId1][0],
+      sr: localSr,
+    })
+    const vmBackupOnSharedSr = await xo.importVmBackup({
+      id: backupsByRemote[remoteId2][0],
+      sr: sharedSr,
+    })
+
+    expect(xo.objects.all[vmBackupOnLocalSr]).not.toBe(undefined)
+    expect(xo.objects.all[vmBackupOnSharedSr]).not.toBe(undefined)
+
+    await xo.call('vm.start', { id: vmBackupOnLocalSr })
+    await xo.call('vm.start', { id: vmBackupOnSharedSr })
   })
 })

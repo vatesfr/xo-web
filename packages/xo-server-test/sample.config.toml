@@ -11,12 +11,18 @@
 
 [vms]
   default = ''
+  # vmToBackup = ''
 
 [templates]
   default = ''
+  templateWithoutDisks = ''
 
 [srs]
   default = ''
+  localSr = ''
+  sharedSr = ''
 
 [remotes]
   default = { name = '', url = '' }
+  remote1 = { name = '', url = '' }
+  # remote2 = { name = '', url = '' }
