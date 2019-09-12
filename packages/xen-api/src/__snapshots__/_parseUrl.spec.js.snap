@@ -1,0 +1,1837 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with IPv4 with port with trailing slash http:/bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with IPv4 with port without trailing slash http:/bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with IPv4 without port with trailing slash http:/bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with IPv4 without port without trailing slash http:/bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with IPv6 with port with trailing slash http:/bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with IPv6 with port without trailing slash http:/bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with IPv6 without port with trailing slash http:/bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with IPv6 without port without trailing slash http:/bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with hostname with port with trailing slash http:/bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with hostname with port without trailing slash http:/bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with hostname without port with trailing slash http:/bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes with credentials with hostname without port without trailing slash http:/bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with IPv4 with port with trailing slash http:/172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with IPv4 with port without trailing slash http:/172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with IPv4 without port with trailing slash http:/172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with IPv4 without port without trailing slash http:/172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with IPv6 with port with trailing slash http:/[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with IPv6 with port without trailing slash http:/[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with IPv6 without port with trailing slash http:/[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with IPv6 without port without trailing slash http:/[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with hostname with port with trailing slash http:/server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with hostname with port without trailing slash http:/server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with hostname without port with trailing slash http:/server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 1 slashes without credentials with hostname without port without trailing slash http:/server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with IPv4 with port with trailing slash http://bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with IPv4 with port without trailing slash http://bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with IPv4 without port with trailing slash http://bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with IPv4 without port without trailing slash http://bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with IPv6 with port with trailing slash http://bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with IPv6 with port without trailing slash http://bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with IPv6 without port with trailing slash http://bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with IPv6 without port without trailing slash http://bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with hostname with port with trailing slash http://bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with hostname with port without trailing slash http://bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with hostname without port with trailing slash http://bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes with credentials with hostname without port without trailing slash http://bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with IPv4 with port with trailing slash http://172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with IPv4 with port without trailing slash http://172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with IPv4 without port with trailing slash http://172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with IPv4 without port without trailing slash http://172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with IPv6 with port with trailing slash http://[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with IPv6 with port without trailing slash http://[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with IPv6 without port with trailing slash http://[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with IPv6 without port without trailing slash http://[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with hostname with port with trailing slash http://server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with hostname with port without trailing slash http://server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with hostname without port with trailing slash http://server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP with 2 slashes without credentials with hostname without port without trailing slash http://server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with IPv4 with port with trailing slash http:bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with IPv4 with port without trailing slash http:bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with IPv4 without port with trailing slash http:bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with IPv4 without port without trailing slash http:bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with IPv6 with port with trailing slash http:bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with IPv6 with port without trailing slash http:bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with IPv6 without port with trailing slash http:bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with IPv6 without port without trailing slash http:bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with hostname with port with trailing slash http:bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with hostname with port without trailing slash http:bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with hostname without port with trailing slash http:bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes with credentials with hostname without port without trailing slash http:bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "http:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with IPv4 with port with trailing slash http:172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with IPv4 with port without trailing slash http:172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with IPv4 without port with trailing slash http:172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with IPv4 without port without trailing slash http:172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with IPv6 with port with trailing slash http:[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with IPv6 with port without trailing slash http:[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with IPv6 without port with trailing slash http:[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with IPv6 without port without trailing slash http:[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with hostname with port with trailing slash http:server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with hostname with port without trailing slash http:server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with hostname without port with trailing slash http:server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTP without slashes without credentials with hostname without port without trailing slash http:server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "http:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with IPv4 with port with trailing slash https:/bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with IPv4 with port without trailing slash https:/bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with IPv4 without port with trailing slash https:/bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with IPv4 without port without trailing slash https:/bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with IPv6 with port with trailing slash https:/bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with IPv6 with port without trailing slash https:/bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with IPv6 without port with trailing slash https:/bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with IPv6 without port without trailing slash https:/bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with hostname with port with trailing slash https:/bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with hostname with port without trailing slash https:/bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with hostname without port with trailing slash https:/bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes with credentials with hostname without port without trailing slash https:/bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with IPv4 with port with trailing slash https:/172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with IPv4 with port without trailing slash https:/172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with IPv4 without port with trailing slash https:/172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with IPv4 without port without trailing slash https:/172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with IPv6 with port with trailing slash https:/[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with IPv6 with port without trailing slash https:/[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with IPv6 without port with trailing slash https:/[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with IPv6 without port without trailing slash https:/[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with hostname with port with trailing slash https:/server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with hostname with port without trailing slash https:/server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with hostname without port with trailing slash https:/server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 1 slashes without credentials with hostname without port without trailing slash https:/server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with IPv4 with port with trailing slash https://bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with IPv4 with port without trailing slash https://bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with IPv4 without port with trailing slash https://bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with IPv4 without port without trailing slash https://bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with IPv6 with port with trailing slash https://bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with IPv6 with port without trailing slash https://bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with IPv6 without port with trailing slash https://bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with IPv6 without port without trailing slash https://bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with hostname with port with trailing slash https://bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with hostname with port without trailing slash https://bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with hostname without port with trailing slash https://bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes with credentials with hostname without port without trailing slash https://bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with IPv4 with port with trailing slash https://172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with IPv4 with port without trailing slash https://172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with IPv4 without port with trailing slash https://172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with IPv4 without port without trailing slash https://172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with IPv6 with port with trailing slash https://[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with IPv6 with port without trailing slash https://[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with IPv6 without port with trailing slash https://[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with IPv6 without port without trailing slash https://[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with hostname with port with trailing slash https://server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with hostname with port without trailing slash https://server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with hostname without port with trailing slash https://server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS with 2 slashes without credentials with hostname without port without trailing slash https://server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with IPv4 with port with trailing slash https:bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with IPv4 with port without trailing slash https:bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with IPv4 without port with trailing slash https:bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with IPv4 without port without trailing slash https:bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with IPv6 with port with trailing slash https:bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with IPv6 with port without trailing slash https:bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with IPv6 without port with trailing slash https:bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with IPv6 without port without trailing slash https:bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with hostname with port with trailing slash https:bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with hostname with port without trailing slash https:bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with hostname without port with trailing slash https:bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes with credentials with hostname without port without trailing slash https:bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with IPv4 with port with trailing slash https:172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with IPv4 with port without trailing slash https:172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with IPv4 without port with trailing slash https:172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with IPv4 without port without trailing slash https:172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with IPv6 with port with trailing slash https:[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with IPv6 with port without trailing slash https:[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with IPv6 without port with trailing slash https:[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with IPv6 without port without trailing slash https:[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with hostname with port with trailing slash https:server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with hostname with port without trailing slash https:server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with hostname without port with trailing slash https:server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() with HTTPS without slashes without credentials with hostname without port without trailing slash https:server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with IPv4 with port with trailing slash /bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with IPv4 with port without trailing slash /bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with IPv4 without port with trailing slash /bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with IPv4 without port without trailing slash /bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with IPv6 with port with trailing slash /bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with IPv6 with port without trailing slash /bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with IPv6 without port with trailing slash /bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with IPv6 without port without trailing slash /bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with hostname with port with trailing slash /bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with hostname with port without trailing slash /bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with hostname without port with trailing slash /bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes with credentials with hostname without port without trailing slash /bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with IPv4 with port with trailing slash /172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with IPv4 with port without trailing slash /172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with IPv4 without port with trailing slash /172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with IPv4 without port without trailing slash /172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with IPv6 with port with trailing slash /[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with IPv6 with port without trailing slash /[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with IPv6 without port with trailing slash /[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with IPv6 without port without trailing slash /[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with hostname with port with trailing slash /server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with hostname with port without trailing slash /server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with hostname without port with trailing slash /server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 1 slashes without credentials with hostname without port without trailing slash /server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with IPv4 with port with trailing slash //bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with IPv4 with port without trailing slash //bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with IPv4 without port with trailing slash //bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with IPv4 without port without trailing slash //bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with IPv6 with port with trailing slash //bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with IPv6 with port without trailing slash //bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with IPv6 without port with trailing slash //bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with IPv6 without port without trailing slash //bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with hostname with port with trailing slash //bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with hostname with port without trailing slash //bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with hostname without port with trailing slash //bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes with credentials with hostname without port without trailing slash //bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with IPv4 with port with trailing slash //172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with IPv4 with port without trailing slash //172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with IPv4 without port with trailing slash //172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with IPv4 without port without trailing slash //172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with IPv6 with port with trailing slash //[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with IPv6 with port without trailing slash //[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with IPv6 without port with trailing slash //[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with IPv6 without port without trailing slash //[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with hostname with port with trailing slash //server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with hostname with port without trailing slash //server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with hostname without port with trailing slash //server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol with 2 slashes without credentials with hostname without port without trailing slash //server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with IPv4 with port with trailing slash bob:s3cr3t@172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with IPv4 with port without trailing slash bob:s3cr3t@172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with IPv4 without port with trailing slash bob:s3cr3t@172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with IPv4 without port without trailing slash bob:s3cr3t@172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with IPv6 with port with trailing slash bob:s3cr3t@[2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with IPv6 with port without trailing slash bob:s3cr3t@[2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with IPv6 without port with trailing slash bob:s3cr3t@[2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with IPv6 without port without trailing slash bob:s3cr3t@[2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with hostname with port with trailing slash bob:s3cr3t@server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with hostname with port without trailing slash bob:s3cr3t@server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "port": 4343,
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with hostname without port with trailing slash bob:s3cr3t@server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes with credentials with hostname without port without trailing slash bob:s3cr3t@server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "password": "s3cr3t",
+  "protocol": "https:",
+  "username": "bob",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with IPv4 with port with trailing slash 172.16.254.1:4343/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with IPv4 with port without trailing slash 172.16.254.1:4343 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with IPv4 without port with trailing slash 172.16.254.1/ 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with IPv4 without port without trailing slash 172.16.254.1 1`] = `
+Object {
+  "hostname": "172.16.254.1",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with IPv6 with port with trailing slash [2001:db8::7334]:4343/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with IPv6 with port without trailing slash [2001:db8::7334]:4343 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with IPv6 without port with trailing slash [2001:db8::7334]/ 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with IPv6 without port without trailing slash [2001:db8::7334] 1`] = `
+Object {
+  "hostname": "2001:db8::7334",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with hostname with port with trailing slash server.example.net:4343/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with hostname with port without trailing slash server.example.net:4343 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "port": 4343,
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with hostname without port with trailing slash server.example.net/ 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;
+
+exports[`parseUrl() without protocol without slashes without credentials with hostname without port without trailing slash server.example.net 1`] = `
+Object {
+  "hostname": "server.example.net",
+  "protocol": "https:",
+}
+`;

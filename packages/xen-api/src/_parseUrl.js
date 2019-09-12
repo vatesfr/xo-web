@@ -1,4 +1,4 @@
-const URL_RE = /^(?:(https?:)\/*)?(?:([^:]+):([^@]+)@)?(?:\[([^\]]+)\]|([^:/]+))(?::([0-9]+))?\/?$/
+const URL_RE = /^(?:(https?:))?\/*(?:([^:]+):([^@]+)@)?(?:\[([^\]]+)\]|([^:/]+))(?::([0-9]+))?\/?$/
 
 export default url => {
   const matches = URL_RE.exec(url)
@@ -15,7 +15,10 @@ export default url => {
     hostname = ipv6,
     port,
   ] = matches
-  const parsedUrl = { protocol, hostname, port }
+  const parsedUrl = { protocol, hostname }
+  if (port !== undefined) {
+    parsedUrl.port = +port
+  }
   if (username !== undefined) {
     parsedUrl.username = decodeURIComponent(username)
   }
