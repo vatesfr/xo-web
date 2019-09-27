@@ -36,7 +36,7 @@ export default class Connection {
     this._deferreds = { __proto__: null }
     this._onMessage = onMessage.bind(this)
 
-    const url = new URL('./api/')
+    const url = new URL('/api', window.origin)
     url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:'
     this._url = url.href
 

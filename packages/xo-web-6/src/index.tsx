@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import React, { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 
