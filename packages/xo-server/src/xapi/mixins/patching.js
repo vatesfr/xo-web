@@ -2,6 +2,7 @@ import createLogger from '@xen-orchestra/log'
 import deferrable from 'golike-defer'
 import unzip from 'julien-f-unzip'
 import { filter, find, pickBy, some } from 'lodash'
+import { listMissingPatchesFailed } from 'xo-common/api-errors'
 
 import ensureArray from '../../_ensureArray'
 import { debounce } from '../../decorators'
@@ -40,7 +41,7 @@ const XCP_NG_DEBOUNCE_TIME_MS = 60000
 // list all yum updates available for a XCP-ng host
 // (hostObject) → { uuid: patchObject }
 async function _listXcpUpdates(host) {
-  return JSON.parse(
+  const patches = JSON.parse(
     await this.call(
       'host.call_plugin',
       host.$ref,
@@ -49,6 +50,15 @@ async function _listXcpUpdates(host) {
       {}
     )
   )
+
+  if (patches.error !== undefined) {
+    throw listMissingPatchesFailed({
+      host: host.$id,
+      reason: patches.error,
+    })
+  }
+
+  return patches
 }
 
 const _listXcpUpdateDebounced = debounceWithKey(

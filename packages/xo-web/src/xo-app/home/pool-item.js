@@ -32,7 +32,7 @@ import styles from './index.css'
     getPoolHosts,
     hosts => {
       return Promise.all(map(hosts, host => getHostMissingPatches(host))).then(
-        patches => uniq(map(flatten(patches), 'name'))
+        patches => uniq(map(flatten(patches.filter(Boolean)), 'name'))
       )
     }
   )

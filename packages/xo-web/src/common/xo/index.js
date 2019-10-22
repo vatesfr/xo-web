@@ -761,15 +761,16 @@ export const disableHost = host =>
 
 export const getHostMissingPatches = async host => {
   const hostId = resolveId(host)
-  if (host.productBrand !== 'XCP-ng') {
+  try {
     const patches = await _call('pool.listMissingPatches', { host: hostId })
     // Hide paid patches to XS-free users
-    return host.license_params.sku_type !== 'free'
-      ? patches
-      : filter(patches, { paid: false })
-  }
-  try {
-    return await _call('pool.listMissingPatches', { host: hostId })
+    if (
+      host.productBrand !== 'XCP-ng' &&
+      host.license_params.sku_type !== 'free'
+    ) {
+      return filter(patches, { paid: false })
+    }
+    return patches
   } catch (_) {
     return null
   }

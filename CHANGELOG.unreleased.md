@@ -18,6 +18,7 @@
 > Users must be able to say: “I had this issue, happy to know it's fixed”
 
 - [SR] Fix `[object HTMLInputElement]` name after re-attaching a SR [#4546](https://github.com/vatesfr/xen-orchestra/issues/4546) (PR [#4550](https://github.com/vatesfr/xen-orchestra/pull/4550))
+- [Patches] Better error handling when fetching missing patches (PR [#4519](https://github.com/vatesfr/xen-orchestra/pull/4519))
 
 ### Released packages
 

@@ -914,8 +914,8 @@ const messages = {
   installAllPatchesOnHostContent:
     'Are you sure you want to install all patches on this host?',
   patchRelease: 'Release',
-  updatePluginNotInstalled:
-    'An error occurred while fetching the patches. Please make sure the updater plugin is installed by running `yum install xcp-ng-updater` on the host.',
+  cannotFetchMissingPatches:
+    'We are unable to fetch the missing patches at the moment…',
   showChangelog: 'Show changelog',
   changelog: 'Changelog',
   changelogPatch: 'Patch',

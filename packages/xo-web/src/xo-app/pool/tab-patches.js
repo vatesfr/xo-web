@@ -198,7 +198,15 @@ export default class TabPatches extends Component {
               />
             </Col>
           </Row>
-          {productBrand === 'XCP-ng' ? (
+          {missingPatches === null ? (
+            <Row>
+              <Col>
+                <p>
+                  <em>{_('cannotFetchMissingPatches')}</em>
+                </p>
+              </Col>
+            </Row>
+          ) : productBrand === 'XCP-ng' ? (
             <Row>
               <Col>
                 <h3>{_('hostMissingPatches')}</h3>

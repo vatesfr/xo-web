@@ -285,7 +285,7 @@ export default class TabPatches extends Component {
       )
     }
     if (this.props.missingPatches === null) {
-      return <em>{_('updatePluginNotInstalled')}</em>
+      return <em>{_('cannotFetchMissingPatches')}</em>
     }
     const Patches =
       this.props.host.productBrand === 'XCP-ng' ? XcpPatches : XenServerPatches
