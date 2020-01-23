@@ -71,6 +71,9 @@ export const mergeVhd = defer(async function(
       null,
       2
     ) + '\n',
+    {
+      flag: 'a',
+    },
     Function.prototype
   )
 
