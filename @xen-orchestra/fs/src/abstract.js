@@ -9,6 +9,7 @@ import path from 'path'
 import synchronized from 'decorator-synchronized'
 import { fromCallback, fromEvent, ignoreErrors, timeout } from 'promise-toolbox'
 import { parse } from 'xo-remote-parser'
+import { pipeline } from 'readable-stream'
 import { randomBytes } from 'crypto'
 import { type Readable, type Writable } from 'stream'
 
@@ -17,7 +18,7 @@ import { createChecksumStream, validChecksumOfReadStream } from './checksum'
 
 const { dirname } = path.posix
 
-type Data = Buffer | Readable | string
+type Data = Buffer | string
 type FileDescriptor = {| fd: mixed, path: string |}
 type LaxReadable = Readable & Object
 type LaxWritable = Writable & Object
@@ -33,6 +34,8 @@ const computeRate = (hrtime: number[], size: number) => {
 
 const DEFAULT_TIMEOUT = 6e5 // 10 min
 const DEFAULT_MAX_PARALLEL_OPERATIONS = 10
+
+const EMPTY_OBJECT = { __proto__: null }
 
 const ignoreEnoent = error => {
   if (error == null || error.code !== 'ENOENT') {
@@ -317,6 +320,32 @@ export default class RemoteHandlerAbstract {
     await this._outputFile(normalizePath(file), data, { flags })
   }
 
+  async outputStream(
+    file: File,
+    stream: Readable,
+    options: {
+      checksum?: boolean,
+      flags?: string,
+      start?: number,
+      unlinkOnError?: boolean,
+    } = {}
+  ): Promise<void> {
+    const isString = typeof file === 'string'
+    if (isString) {
+      file = normalizePath(file)
+    }
+    try {
+      return await this.writeStream(file, stream, options)
+    } catch (error) {
+      if (!(isString && error.code === 'ENOENT')) {
+        throw error
+      }
+    }
+
+    await this._mktree(dirname(file))
+    return this.outputStream(file, stream, options)
+  }
+
   async read(
     file: File,
     buffer: Buffer,
@@ -453,6 +482,58 @@ export default class RemoteHandlerAbstract {
     { flags = 'wx' }: { flags?: string } = {}
   ): Promise<void> {
     await this._writeFile(normalizePath(file), data, { flags })
+  }
+
+  // Write a stream to a file, easier to use and more robust than using
+  // `createOutputStream`
+  //
+  // TODO: temporary name support?
+  async writeStream(
+    file: File,
+    stream: Readable,
+    {
+      checksum = false,
+      flags = 'wx',
+      start = 0,
+      tmpPath = true,
+      unlinkOnError = true,
+    }: {
+      checksum?: boolean,
+      flags?: string,
+      start?: number,
+      unlinkOnError?: boolean,
+    } = {}
+  ): Promise<void> {
+    let path
+    if (typeof file === 'string') {
+      path = file = normalizePath(file)
+    } else {
+      ;({ path } = file)
+    }
+    const outputStream = await this._createWriteStream(file, { flags, start })
+    const args = [stream]
+    let checksumStream
+    if (checksum) {
+      args.push((checksumStream = createChecksumStream()))
+    }
+
+    try {
+      await fromCallback(cb => {
+        args.push(outputStream, cb)
+        pipeline.apply(undefined, args)
+      })
+    } catch (error) {
+      await ignoreErrors.call(this._unlink(path))
+      throw error
+    }
+
+    if (checksum) {
+      await this._writeFile(
+        checksumFile(path),
+        await checksumStream.checksum,
+        EMPTY_OBJECT
+      )
+    }
   }
 
   // Methods that can be implemented by inheriting classes

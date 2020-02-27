@@ -238,6 +238,13 @@ handlers.forEach(url => {
       })
     })
 
+    describe('#outputStream()', () => {
+      it('writes a stream into a file', async () => {
+        await handler.outputStream('file', createTestDataStream())
+        expect(await handler.readFile('file')).toEqual(TEST_DATA)
+      })
+    })
+
     describe('#readFile', () => {
       it('returns a buffer containing the contents of the file', async () => {
         await handler.outputFile('file', TEST_DATA)
