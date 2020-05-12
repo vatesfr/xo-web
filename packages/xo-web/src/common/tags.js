@@ -117,15 +117,18 @@ export default class Tags extends Component {
       ::pFinally(this._stopEdit)
       .then(tags => Promise.all(tags.map(this._addTag)))
 
-  _focus = () => {
-    this._focused = true
+  _closeEditionIfUnfocused = () => {
+    if (this._canBlur) {
+      this._stopEdit()
+    }
   }
 
-  _closeEditionIfUnfocused = () => {
-    this._focused = false
-    setTimeout(() => {
-      !this._focused && this._stopEdit()
-    }, 10)
+  _onMouseDown = () => {
+    this._canBlur = false
+  }
+
+  _onMouseUp = () => {
+    this._canBlur = true
   }
 
   render() {
@@ -154,7 +157,8 @@ export default class Tags extends Component {
           <span
             className='form-inline'
             onBlur={this._closeEditionIfUnfocused}
-            onFocus={this._focus}
+            onMouseDown={this._onMouseDown}
+            onMouseUp={this._onMouseUp}
           >
             <span className='input-group'>
               <input

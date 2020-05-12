@@ -16,6 +16,7 @@
 > Users must be able to say: “I had this issue, happy to know it's fixed”
 
 - Fix mounting of NFS remote in FreeBSD (PR [#4988](https://github.com/vatesfr/xen-orchestra/issues/4988))
+- [Tag] Fix 'add existing tag' in some browsers [#4960](https://github.com/vatesfr/xen-orchestra/issues/4960) (PR [#4993](https://github.com/vatesfr/xen-orchestra/pull/4993))
 
 ### Released packages
 
