@@ -23,7 +23,6 @@ import {
 } from 'utils'
 import {
   SelectNetwork,
-  SelectIp,
   SelectResourceSetIp,
   SelectResourceSetsNetwork,
 } from 'select-objects'
@@ -89,31 +88,37 @@ class VifNetwork extends BaseComponent {
   ipPools: subscribeIpPools,
   resourceSets: subscribeResourceSets,
 })
+@connectStore({
+  isAdmin,
+})
 class VifAllowedIps extends BaseComponent {
   _saveIp = (ipIndex, newIp) => {
-    if (!isIp(newIp.id)) {
+    newIp = newIp.id === undefined ? newIp : newIp.id
+    if (!isIp(newIp)) {
       throw new Error('Not a valid IP')
     }
     const vif = this.props.item
     const { allowedIpv4Addresses, allowedIpv6Addresses } = vif
-    if (isIpV4(newIp.id)) {
-      allowedIpv4Addresses[ipIndex] = newIp.id
+    if (isIpV4(newIp)) {
+      allowedIpv4Addresses[ipIndex] = newIp
     } else {
-      allowedIpv6Addresses[ipIndex - allowedIpv4Addresses.length] = newIp.id
+      allowedIpv6Addresses[ipIndex - allowedIpv4Addresses.length] = newIp
     }
     setVif(vif, { allowedIpv4Addresses, allowedIpv6Addresses })
   }
   _addIp = ip => {
+    ip = ip.id === undefined ? ip : ip.id
     this._toggleNewIp()
-    if (!isIp(ip.id)) {
+    if (!isIp(ip)) {
+      console.log('Not an ip')
       return
     }
     const vif = this.props.item
     let { allowedIpv4Addresses, allowedIpv6Addresses } = vif
-    if (isIpV4(ip.id)) {
-      allowedIpv4Addresses = [...allowedIpv4Addresses, ip.id]
+    if (isIpV4(ip)) {
+      allowedIpv4Addresses = [...allowedIpv4Addresses, ip]
     } else {
-      allowedIpv6Addresses = [...allowedIpv6Addresses, ip.id]
+      allowedIpv6Addresses = [...allowedIpv6Addresses, ip]
     }
     setVif(vif, { allowedIpv4Addresses, allowedIpv6Addresses })
   }
@@ -172,7 +177,13 @@ class VifAllowedIps extends BaseComponent {
 
   render() {
     const { showNewIpForm } = this.state
-    const { resourceSet, item: vif } = this.props
+    const {
+      isAdmin,
+      userData: {
+        vm: { resourceSet },
+      },
+      item: vif,
+    } = this.props
 
     if (!vif) {
       return null
@@ -189,16 +200,23 @@ class VifAllowedIps extends BaseComponent {
           map(this._getIps(), (ip, ipIndex) => (
             <Row>
               <Col size={10}>
-                <XoSelect
-                  containerPredicate={this._getIsNetworkAllowed()}
-                  onChange={newIp => this._saveIp(ipIndex, newIp)}
-                  predicate={this._getIpPredicate()}
-                  resourceSetId={resourceSet}
-                  value={ip}
-                  xoType={resourceSet ? 'resourceSetIp' : 'ip'}
-                >
-                  {ip}
-                </XoSelect>
+                {resourceSet !== undefined && !isAdmin ? (
+                  <XoSelect
+                    containerPredicate={this._getIsNetworkAllowed()}
+                    onChange={newIp => this._saveIp(ipIndex, newIp)}
+                    predicate={this._getIpPredicate()}
+                    resourceSetId={resourceSet}
+                    value={ip}
+                    xoType='resourceSetIp'
+                  >
+                    {ip}
+                  </XoSelect>
+                ) : (
+                  <Text
+                    onChange={newIp => this._saveIp(ipIndex, newIp)}
+                    value={ip}
+                  />
+                )}
               </Col>
               <Col size={1}>
                 <ActionRowButton
@@ -214,7 +232,7 @@ class VifAllowedIps extends BaseComponent {
           <Col size={10}>
             {showNewIpForm ? (
               <span onBlur={this._toggleNewIp}>
-                {resourceSet ? (
+                {resourceSet !== undefined && !isAdmin ? (
                   <SelectResourceSetIp
                     autoFocus
                     containerPredicate={this._getIsNetworkAllowed()}
@@ -223,12 +241,19 @@ class VifAllowedIps extends BaseComponent {
                     resourceSetId={resourceSet}
                   />
                 ) : (
-                  <SelectIp
-                    autoFocus
-                    containerPredicate={this._getIsNetworkAllowed()}
-                    onChange={this._addIp}
-                    predicate={this._getIpPredicate()}
-                  />
+                  <form>
+                    <input
+                      autoFocus
+                      className='form-control'
+                      type='text'
+                      onChange={this.linkState('newIp')}
+                    />
+                    <input
+                      type='submit'
+                      onClick={() => this._addIp(this.state.newIp)}
+                      hidden
+                    />
+                  </form>
                 )}
               </span>
             ) : (
@@ -566,7 +591,7 @@ export default class TabNetwork extends BaseComponent {
               groupedActions={GROUPED_ACTIONS}
               individualActions={INDIVIDUAL_ACTIONS}
               stateUrlParam='s'
-              userData={{ networks }}
+              userData={{ networks, vm }}
             />
             {!isEmpty(vm.addresses) ? (
               <span>
