@@ -330,25 +330,29 @@ class JobsTable extends React.Component {
         name: _('formNotes'),
       },
     ],
-    individualActions: [
-      {
-        handler: (job, { goTo }) =>
-          goTo({
-            pathname: '/home',
-            query: { t: 'VM', s: constructQueryString(job.vms) },
-          }),
-        disabled: job => job.type !== 'backup',
-        label: _('redirectToMatchingVms'),
-        icon: 'preview',
-      },
-      {
-        handler: (job, { goToNewTab }) => goToNewTab(`/backup/${job.id}/edit`),
-        label: _('formEdit'),
-        icon: 'edit',
-        level: 'primary',
-      },
-    ],
   }
+
+  individualActions = [
+    {
+      handler: (job, { goTo }) =>
+        goTo({
+          pathname: '/home',
+          query: { t: 'VM', s: constructQueryString(job.vms) },
+        }),
+      disabled: job => job.type !== 'backup',
+      label: _('redirectToMatchingVms'),
+      icon: 'preview',
+    },
+    {
+      handler: (job, { goTo, goToNewTab }) => {
+        const method = this.props.main ? goTo : goToNewTab
+        return method(`/backup/${job.id}/edit`)
+      },
+      label: _('formEdit'),
+      icon: 'edit',
+      level: 'primary',
+    },
+  ]
 
   _getActions = createSelector(
     () => this.props.main,
@@ -392,6 +396,7 @@ class JobsTable extends React.Component {
         data-goToNewTab={this._goToNewTab}
         data-main={this.props.main}
         data-schedulesByJob={this.props.schedulesByJob}
+        individualActions={this.individualActions}
         stateUrlParam='s'
       />
     )
