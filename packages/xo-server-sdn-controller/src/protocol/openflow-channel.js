@@ -1,3 +1,4 @@
+import assert from 'assert'
 import createLogger from '@xen-orchestra/log'
 import ipaddr from 'ipaddr.js'
 import openflow from '@xen-orchestra/openflow'
@@ -116,7 +117,7 @@ export class OpenFlowChannel extends EventEmitter {
     const { dlType, nwProto } = dlAndNwProtocolFromString(protocol)
     const mac = vif.MAC
 
-    await this._coalesceConnect()
+    await this._coalesceConnect(vif.network)
     if (direction.includes('from')) {
       this._addFlow(
         {
@@ -176,6 +177,9 @@ export class OpenFlowChannel extends EventEmitter {
         instructions
       )
     }
+
+    await this._tlsHelper.closeSocket(this._socket)
+    delete this._socket
   }
 
   async deleteRule(vif, protocol, port, ipRange, direction, ofport) {
@@ -190,7 +194,7 @@ export class OpenFlowChannel extends EventEmitter {
     const { dlType, nwProto } = dlAndNwProtocolFromString(protocol)
     const mac = vif.MAC
 
-    await this._coalesceConnect()
+    await this._coalesceConnect(vif.network)
     if (direction.includes('from')) {
       this._removeFlows({
         type: ofProtocol.matchType.standard,
@@ -235,6 +239,9 @@ export class OpenFlowChannel extends EventEmitter {
         tp_src: port,
       })
     }
+
+    await this._tlsHelper.closeSocket(this._socket)
+    delete this._socket
   }
 
   // ===========================================================================
@@ -369,15 +376,15 @@ export class OpenFlowChannel extends EventEmitter {
     }
   }
 
-  async _connect() {
+  async _connect(networkUuid) {
     if (this._socket !== undefined) {
       return
     }
 
-    this._socket = await this._tlsHelper.connect(
-      this.host.address,
-      OPENFLOW_PORT
-    )
+    const pif = this.host.$PIFs.find(pif => pif?.network === networkUuid)
+    assert(pif !== undefined, 'No PIF available')
+
+    this._socket = await this._tlsHelper.connect(pif.IP, OPENFLOW_PORT)
 
     const deleteSocket = () => {
       this._socket = undefined

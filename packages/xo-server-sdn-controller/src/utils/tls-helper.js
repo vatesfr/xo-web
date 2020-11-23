@@ -51,4 +51,18 @@ export class TlsHelper {
 
     return socket
   }
+
+  async closeSocket(socket) {
+    socket.end()
+    try {
+      await fromEvent(socket, 'finish')
+    } catch (error) {
+      log.error('TLS socket closure failed', {
+        error,
+        socket,
+      })
+    }
+
+    log.debug('TLS socket closed')
+  }
 }
