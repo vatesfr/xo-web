@@ -726,6 +726,9 @@ export async function probeIscsiLuns({ host, target: targetIp, port, targetIqn, 
     }
 
     xml = parseXml(error.params[2])
+
+    console.log(error.params)
+    console.log(xml)
   }
 
   const luns = []
