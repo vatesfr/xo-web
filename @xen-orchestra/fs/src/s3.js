@@ -1,9 +1,11 @@
 import aws from '@sullux/aws-sdk'
 import assert from 'assert'
+import http from 'http'
 import { parse } from 'xo-remote-parser'
 
 import RemoteHandlerAbstract from './abstract'
 import { createChecksumStream } from './checksum'
+import CancelToken from 'promise-toolbox/CancelToken'
 
 // endpoints https://docs.aws.amazon.com/general/latest/gr/s3.html
 
@@ -13,12 +15,14 @@ const MAX_PART_SIZE = 1024 * 1024 * 1024 * 5 // 5GB
 const MAX_PARTS_COUNT = 10000
 const MAX_OBJECT_SIZE = 1024 * 1024 * 1024 * 1024 * 5 // 5TB
 const IDEAL_FRAGMENT_SIZE = Math.ceil(MAX_OBJECT_SIZE / MAX_PARTS_COUNT) // the smallest fragment size that still allows a 5TB upload in 10000 fragments, about 524MB
+
+const USE_SSL = true
 export default class S3Handler extends RemoteHandlerAbstract {
   constructor(remote, _opts) {
     super(remote)
     const { host, path, username, password } = parse(remote.url)
     // https://www.zenko.io/blog/first-things-first-getting-started-scality-s3-server/
-    this._s3 = aws({
+    const params = {
       accessKeyId: username,
       apiVersion: '2006-03-01',
       endpoint: host,
@@ -28,7 +32,12 @@ export default class S3Handler extends RemoteHandlerAbstract {
       httpOptions: {
         timeout: 600000,
       },
-    }).s3
+    }
+    if (!USE_SSL) {
+      params.httpOptions.agent = new http.Agent()
+      params.sslEnabled = false
+    }
+    this._s3 = aws(params).s3
 
     const splitPath = path.split('/').filter(s => s.length)
     this._bucket = splitPath.shift()
@@ -43,7 +52,10 @@ export default class S3Handler extends RemoteHandlerAbstract {
     return { Bucket: this._bucket, Key: this._dir + file }
   }
 
-  async _outputStream(input, path, { checksum }) {
+  async _outputStream(input, path, { checksum, cancelToken = CancelToken.none }) {
+    cancelToken.promise.then(reason => {
+      input.destroy(reason)
+    })
     let inputStream = input
     if (checksum) {
       const checksumStream = createChecksumStream()
@@ -266,4 +278,26 @@ export default class S3Handler extends RemoteHandlerAbstract {
   }
 
   async _closeFile(fd) {}
+
+  // https://stackoverflow.com/a/48955582/72637
+  async _rmtree(dir) {
+    const listParams = {
+      Bucket: this._bucket,
+      Prefix: this._dir + dir,
+    }
+    let listedObjects = {}
+    do {
+      listedObjects = await this._s3.listObjectsV2({
+        ...listParams,
+        ContinuationToken: listedObjects.NextContinuationToken,
+      })
+      if (listedObjects.Contents.length === 0) {
+        return
+      }
+      await this._s3.deleteObjects({
+        Bucket: this._bucket,
+        Delete: { Objects: listedObjects.Contents.map(({ Key }) => ({ Key })) },
+      })
+    } while (listedObjects.IsTruncated)
+  }
 }

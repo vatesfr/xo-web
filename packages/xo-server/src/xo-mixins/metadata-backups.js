@@ -1,7 +1,7 @@
 // @flow
 import asyncMap from '@xen-orchestra/async-map'
 import createLogger from '@xen-orchestra/log'
-import { fromEvent, ignoreErrors, timeout } from 'promise-toolbox'
+import { ignoreErrors, timeout } from 'promise-toolbox'
 import { parseDuration } from '@vates/parse-duration'
 
 import { debounceWithKey, REMOVE_CACHE_ENTRY } from '../_pDebounceWithKey'
@@ -304,20 +304,13 @@ export default class metadataBackup {
           }
         )
 
-        let outputStream
         try {
           const { dirMode } = this._backupOptions
           await waitAll([
             (async () => {
-              outputStream = await handler.createOutputStream(fileName, {
-                dirMode,
-              })
-
-              // 'readable-stream/pipeline' not call the callback when an error throws
-              // from the readable stream
-              stream.pipe(outputStream)
               return timeout.call(
-                fromEvent(stream, 'end').catch(error => {
+                handler.outputStream(fileName, stream, { cancelToken }).catch(error => {
+                  stream.destroy()
                   if (error.message !== 'aborted') {
                     throw error
                   }
@@ -353,9 +346,6 @@ export default class metadataBackup {
 
           this._listPoolMetadataBackups(REMOVE_CACHE_ENTRY, remoteId)
         } catch (error) {
-          if (outputStream !== undefined) {
-            outputStream.destroy()
-          }
           await handler.rmtree(dir).catch(error => {
             logger.warning(`unable to delete the folder ${dir}`, {
               event: 'task.warning',

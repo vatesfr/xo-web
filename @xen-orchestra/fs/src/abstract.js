@@ -4,6 +4,7 @@
 import getStream from 'get-stream'
 
 import asyncMap from '@xen-orchestra/async-map'
+import CancelToken from 'promise-toolbox/CancelToken'
 import limit from 'limit-concurrency-decorator'
 import path, { basename } from 'path'
 import synchronized from 'decorator-synchronized'
@@ -119,42 +120,6 @@ export default class RemoteHandlerAbstract {
     await this.__closeFile(fd)
   }
 
-  // TODO: remove method
-  async createOutputStream(file: File, { checksum = false, dirMode, ...options }: Object = {}): Promise<LaxWritable> {
-    if (typeof file === 'string') {
-      file = normalizePath(file)
-    }
-    const path = typeof file === 'string' ? file : file.path
-    const streamP = timeout.call(
-      this._createOutputStream(file, {
-        dirMode,
-        flags: 'wx',
-        ...options,
-      }),
-      this._timeout
-    )
-
-    if (!checksum) {
-      return streamP
-    }
-
-    const checksumStream = createChecksumStream()
-    const forwardError = error => {
-      checksumStream.emit('error', error)
-    }
-
-    const stream = await streamP
-    stream.on('error', forwardError)
-    checksumStream.pipe(stream)
-
-    // $FlowFixMe
-    checksumStream.checksumWritten = checksumStream.checksum
-      .then(value => this._outputFile(checksumFile(path), value, { flags: 'wx' }))
-      .catch(forwardError)
-
-    return checksumStream
-  }
-
   createReadStream(
     file: File,
     { checksum = false, ignoreMissingChecksum = false, ...options }: Object = {}
@@ -209,14 +174,15 @@ export default class RemoteHandlerAbstract {
 
   // write a stream to a file using a temporary file
   async outputStream(
-    input: Readable | Promise<Readable>,
     path: string,
-    { checksum = true, dirMode }: { checksum?: boolean, dirMode?: number } = {}
+    input: Readable | Promise<Readable>,
+    { checksum = true, dirMode, cancelToken = CancelToken.none }: { checksum?: boolean, dirMode?: number } = {}
   ): Promise<void> {
     path = normalizePath(path)
     return this._outputStream(await input, normalizePath(path), {
       checksum,
       dirMode,
+      cancelToken,
     })
   }
 
@@ -477,13 +443,51 @@ export default class RemoteHandlerAbstract {
     return this._outputFile(file, data, { flags })
   }
 
-  async _outputStream(input: Readable, path: string, { checksum, dirMode }: { checksum?: boolean, dirMode?: number }) {
+  async _createOutputStreamChecksum(file: File, { checksum = false, ...options }: Object = {}): Promise<LaxWritable> {
+    if (typeof file === 'string') {
+      file = normalizePath(file)
+    }
+    const path = typeof file === 'string' ? file : file.path
+    const streamP = timeout.call(
+      this._createOutputStream(file, {
+        flags: 'wx',
+        ...options,
+      }),
+      this._timeout
+    )
+
+    if (!checksum) {
+      return streamP
+    }
+
+    const checksumStream = createChecksumStream()
+    const forwardError = error => {
+      checksumStream.emit('error', error)
+    }
+
+    const stream = await streamP
+    stream.on('error', forwardError)
+    checksumStream.pipe(stream)
+
+    // $FlowFixMe
+    checksumStream.checksumWritten = checksumStream.checksum
+      .then(value => this._outputFile(checksumFile(path), value, { flags: 'wx' }))
+      .catch(forwardError)
+
+    return checksumStream
+  }
+
+  async _outputStream(
+    input: Readable,
+    path: string,
+    { checksum, dirMode, cancelToken = CancelToken.none }: { checksum?: boolean, dirMode?: number }
+  ) {
     const tmpPath = `${dirname(path)}/.${basename(path)}`
-    const output = await this.createOutputStream(tmpPath, {
-      checksum,
-      dirMode,
-    })
+    const output = await this._createOutputStreamChecksum(tmpPath, { checksum })
     try {
+      cancelToken.promise.then(reason => {
+        input.destroy(reason)
+      })
       input.pipe(output)
       await fromEvent(output, 'finish')
       await output.checksumWritten

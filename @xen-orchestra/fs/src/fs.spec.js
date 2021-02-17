@@ -3,11 +3,9 @@
 import 'dotenv/config'
 import asyncIteratorToStream from 'async-iterator-to-stream'
 import { forOwn, random } from 'lodash'
-import { fromCallback } from 'promise-toolbox'
-import { pipeline } from 'readable-stream'
 import { tmpdir } from 'os'
 
-import { getHandler } from '.'
+import { getHandler } from './'
 
 // https://gist.github.com/julien-f/3228c3f34fdac01ade09
 const unsecureRandomBytes = n => {
@@ -82,10 +80,9 @@ handlers.forEach(url => {
       })
     })
 
-    describe('#createOutputStream()', () => {
+    describe('#outputStream()', () => {
       it('creates parent dir if missing', async () => {
-        const stream = await handler.createOutputStream('dir/file')
-        await fromCallback(pipeline, createTestDataStream(), stream)
+        await handler.outputStream('dir/file', createTestDataStream())
         await expect(await handler.readFile('dir/file')).toEqual(TEST_DATA)
       })
     })
