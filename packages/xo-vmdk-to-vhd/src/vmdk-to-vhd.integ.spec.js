@@ -38,6 +38,15 @@ function createFileAccessor(file) {
   }
 }
 
+function bufferToArray(buffer) {
+  const view = new DataView(buffer)
+  const res = []
+  for (let i = 0; i < buffer.byteLength; i += 4) {
+    res.push(view.getUint32(i, true))
+  }
+  return res
+}
+
 test('VMDK to VHD can convert a random data file with VMDKDirectParser', async () => {
   const inputRawFileName = 'random-data.raw'
   const vmdkFileName = 'random-data.vmdk'
@@ -52,7 +61,11 @@ test('VMDK to VHD can convert a random data file with VMDKDirectParser', async (
     })
     const result = await readVmdkGrainTable(createFileAccessor(vmdkFileName))
     const pipe = (
-      await vmdkToVhd(createReadStream(vmdkFileName), result.grainLogicalAddressList, result.grainFileOffsetList)
+      await vmdkToVhd(
+        createReadStream(vmdkFileName),
+        bufferToArray(result.grainLogicalAddressList),
+        bufferToArray(result.grainFileOffsetList)
+      )
     ).pipe(createWriteStream(vhdFileName))
     await eventToPromise(pipe, 'finish')
     await execa('vhd-util', ['check', '-p', '-b', '-t', '-n', vhdFileName])

@@ -184,13 +184,19 @@ export default class Vhd {
     return i < blockTable.length ? blockTable.readUInt32BE(i) : BLOCK_UNUSED
   }
 
-  _readBlock(blockId, onlyBitmap = false) {
+  // returns actual byt offset in the file or null
+  _getBlockOffsetBytes(blockId) {
     const blockAddr = this._getBatEntry(blockId)
-    if (blockAddr === BLOCK_UNUSED) {
+    return blockAddr === BLOCK_UNUSED ? null : sectorsToBytes(blockAddr)
+  }
+
+  _readBlock(blockId, onlyBitmap = false) {
+    const blockAddr = this._getBlockOffsetBytes(blockId)
+    if (blockAddr === null) {
       throw new Error(`no such block ${blockId}`)
     }
 
-    return this._read(sectorsToBytes(blockAddr), onlyBitmap ? this.bitmapSize : this.fullBlockSize).then(buf =>
+    return this._read(blockAddr, onlyBitmap ? this.bitmapSize : this.fullBlockSize).then(buf =>
       onlyBitmap
         ? { id: blockId, bitmap: buf }
         : {
@@ -271,15 +277,18 @@ export default class Vhd {
     return this._write(blockTable.slice(i, i + 4), this.header.tableOffset + i)
   }
 
-  // Allocate a new uninitialized block in the BAT
-  async _createBlock(blockId) {
-    assert.strictEqual(this._getBatEntry(blockId), BLOCK_UNUSED)
-
+  // Make a new empty block at vhd end.
+  // Update block allocation table in context and in file.
+  async _createBlock(blockId, fullBlock = Buffer.alloc(this.fullBlockSize)) {
     const blockAddr = Math.ceil(this._getEndOfData() / SECTOR_SIZE)
 
     debug(`create block ${blockId} at ${blockAddr}`)
 
-    await this._setBatEntry(blockId, blockAddr)
+    await Promise.all([
+      // Write an empty block and addr in vhd file.
+      this._write(fullBlock, sectorsToBytes(blockAddr)),
+      this._setBatEntry(blockId, blockAddr),
+    ])
 
     return blockAddr
   }
@@ -298,12 +307,13 @@ export default class Vhd {
     await this._write(bitmap, sectorsToBytes(blockAddr))
   }
 
-  async _writeEntireBlock(block) {
-    let blockAddr = this._getBatEntry(block.id)
+  async _getAddressOrAllocate(blockId) {
+    const blockAddr = this._getBlockOffsetBytes(blockId)
+    return blockAddr === null ? await this._createBlock(blockId) : blockAddr
+  }
 
-    if (blockAddr === BLOCK_UNUSED) {
-      blockAddr = await this._createBlock(block.id)
-    }
+  async _writeEntireBlock(block) {
+    const blockAddr = this._getAddressOrAllocate(block.id)
     await this._write(block.buffer, sectorsToBytes(blockAddr))
   }
 
@@ -333,14 +343,17 @@ export default class Vhd {
   }
 
   async coalesceBlock(child, blockId) {
-    const block = await child._readBlock(blockId)
-    const { bitmap, data } = block
+    const childBlockAddress = child._getBlockOffsetBytes(blockId)
+    const bitmap = (await child._readBlock(blockId, true)).bitmap
 
     debug(`coalesceBlock block=${blockId}`)
 
     // For each sector of block data...
     const { sectorsPerBlock } = child
+    // lazily loaded
     let parentBitmap = null
+    // lazily loaded
+    let childBlock = null
     for (let i = 0; i < sectorsPerBlock; i++) {
       // If no changes on one sector, skip.
       if (!mapTestBit(bitmap, i)) {
@@ -358,19 +371,28 @@ export default class Vhd {
 
       const isFullBlock = i === 0 && endSector === sectorsPerBlock
       if (isFullBlock) {
-        await this._writeEntireBlock(block)
+        await this._handler.copyFileRange(
+          child._path,
+          childBlockAddress,
+          this._path,
+          await this._getAddressOrAllocate(blockId),
+          this.fullBlockSize
+        )
       } else {
         if (parentBitmap === null) {
           parentBitmap = (await this._readBlock(blockId, true)).bitmap
         }
-        await this._writeBlockSectors(block, i, endSector, parentBitmap)
+        if (childBlock === null) {
+          childBlock = await child._readBlock(blockId)
+        }
+        await this._writeBlockSectors(childBlock, i, endSector, parentBitmap)
       }
 
       i = endSector
     }
 
     // Return the merged data size
-    return data.length
+    return this.fullBlockSize - this.bitmapSize
   }
 
   // Write a context footer. (At the end and beginning of a vhd file.)

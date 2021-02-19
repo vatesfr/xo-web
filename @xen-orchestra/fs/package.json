@@ -39,6 +39,9 @@
     "tmp": "^0.2.1",
     "xo-remote-parser": "^0.6.0"
   },
+  "optionalDependencies": {
+    "syscall": "^0.2.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",

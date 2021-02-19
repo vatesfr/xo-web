@@ -119,6 +119,26 @@ export default class RemoteHandlerAbstract {
     await this.__closeFile(fd)
   }
 
+  /**
+   * Copy a range from one file to the other, kernel side, server side or with a reflink if possible.
+   *
+   * Slightly different from the copy_file_range linux system call:
+   *  - offsets are mandatory (because some remote handlers don't have a current pointer for files)
+   *  - flags is fixed to 0
+   *  - will not return until copy is finished.
+   *
+   * @param fdIn read open file descriptor
+   * @param offsetIn either start offset in the source file
+   * @param fdOut write open file descriptor (not append!)
+   * @param offsetOut offset in the target file
+   * @param dataLen how long to copy
+   * @returns {Promise<void>}
+   */
+  async copyFileRange(fdIn, offsetIn, fdOut, offsetOut, dataLen) {
+    const normalize = fd => (typeof fd === 'string' ? normalizePath(fd) : fd)
+    return this._copyFileRange(normalize(fdIn), offsetIn, normalize(fdOut), offsetOut, dataLen)
+  }
+
   // TODO: remove method
   async createOutputStream(file: File, { checksum = false, dirMode, ...options }: Object = {}): Promise<LaxWritable> {
     if (typeof file === 'string') {
@@ -317,27 +337,50 @@ export default class RemoteHandlerAbstract {
   }
 
   async test(): Promise<Object> {
-    const SIZE = 1024 * 1024 * 10
-    const testFileName = normalizePath(`${Date.now()}.test`)
-    const data = await fromCallback(randomBytes, SIZE)
+    const SIZE = 1024 * 1024 * 100
+    const now = Date.now()
+    const testFileName = normalizePath(`${now}.test`)
+    const testFileName2 = normalizePath(`${now}__dup.test`)
+    // get random ASCII for easy debug
+    const data = Buffer.from((await fromCallback(randomBytes, SIZE)).toString('base64'), 'ascii').slice(0, SIZE)
     let step = 'write'
     try {
       const writeStart = process.hrtime()
       await this._outputFile(testFileName, data, { flags: 'wx' })
       const writeDuration = process.hrtime(writeStart)
+      let cloneDuration
+      const fd1 = await this.openFile(testFileName, 'r+')
+      try {
+        const fd2 = await this.openFile(testFileName2, 'wx')
+        try {
+          step = 'duplicate'
+          const cloneStart = process.hrtime()
+          await this.copyFileRange(fd1, 0, fd2, 0, data.byteLength)
+          cloneDuration = process.hrtime(cloneStart)
+        } finally {
+          await this.closeFile(fd2)
+        }
+      } finally {
+        await this.closeFile(fd1)
+      }
 
       step = 'read'
       const readStart = process.hrtime()
       const read = await this._readFile(testFileName, { flags: 'r' })
       const readDuration = process.hrtime(readStart)
-
       if (!data.equals(read)) {
         throw new Error('output and input did not match')
+      }
+
+      const read2 = await this._readFile(testFileName2, { flags: 'r' })
+      if (!data.equals(read2)) {
+        throw new Error('duplicated and input did not match')
       }
       return {
         success: true,
         writeRate: computeRate(writeDuration, SIZE),
         readRate: computeRate(readDuration, SIZE),
+        cloneDuration: computeRate(cloneDuration, SIZE),
       }
     } catch (error) {
       return {
@@ -348,6 +391,7 @@ export default class RemoteHandlerAbstract {
       }
     } finally {
       ignoreErrors.call(this._unlink(testFileName))
+      ignoreErrors.call(this._unlink(testFileName2))
     }
   }
 
@@ -405,6 +449,13 @@ export default class RemoteHandlerAbstract {
 
   async _closeFile(fd: mixed): Promise<void> {
     throw new Error('Not implemented')
+  }
+
+  async _copyFileRange(fdIn, offsetIn, fdOut, offsetOut, dataLen) {
+    // default implementation goes through the network
+    const buffer = Buffer.alloc(dataLen)
+    await this._read(fdIn, buffer, offsetIn)
+    await this._write(fdOut, buffer, offsetOut)
   }
 
   async _createOutputStream(file: File, { dirMode, ...options }: Object = {}): Promise<LaxWritable> {

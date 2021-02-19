@@ -7,6 +7,7 @@
 
 > Users must be able to say: “Nice enhancement, I'm eager to test it”
 
+- [backup] improve merge speed after backup when using SMB3.1.1 or NFS4.2 (PR [#5481](https://github.com/vatesfr/xen-orchestra/pull/5481))
 - [Task] Display age and estimated duration (PR [#5530](https://github.com/vatesfr/xen-orchestra/pull/5530))
 - [Proxy] Ask for a confirmation before upgrading a proxy with running backups (PR [#5533](https://github.com/vatesfr/xen-orchestra/pull/5533))
 - [Backup/restore] Allow backup restore to any licence even if XOA isn't registered (PR [#5547](https://github.com/vatesfr/xen-orchestra/pull/5547))
@@ -45,6 +46,7 @@
 > In case of conflict, the highest (lowest in previous list) `$version` wins.
 
 - @xen-orchestra/fs minor
+- vhd-lib minor
 - xen-api patch
 - xo-common minor
 - xo-server minor
