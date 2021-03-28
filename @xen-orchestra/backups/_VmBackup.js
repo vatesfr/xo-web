@@ -204,6 +204,20 @@ exports.VmBackup = class VmBackup {
 
     const timestamp = Date.now()
 
+    const progress = {
+      handle: setInterval(() => {
+        const { size } = sizeContainer
+        const timestamp = Date.now()
+        Task.info('transfer', {
+          speed: (size - progress.size) / (timestamp - progress.timestamp),
+        })
+        progress.size = size
+        progress.timestamp = timestamp
+      }, 5e3 * 60),
+      size: sizeContainer.size,
+      timestamp,
+    }
+
     await asyncMap(this._writers, async writer => {
       try {
         await writer.run({
@@ -219,6 +233,8 @@ exports.VmBackup = class VmBackup {
         })
       }
     })
+
+    clearInterval(progress.handle)
 
     const { size } = sizeContainer
     const end = Date.now()
