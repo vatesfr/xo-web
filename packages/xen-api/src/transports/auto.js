@@ -14,14 +14,14 @@ export default opts => {
     const current = factories[i++](opts)
     if (i < length) {
       const currentI = i
-      call = (method, args) =>
-        current(method, args).catch(error => {
+      call = (...args) =>
+        current(...args).catch(error => {
           if (error instanceof UnsupportedTransport) {
             if (currentI === i) {
               // not changed yet
               create()
             }
-            return call(method, args)
+            return call(...args)
           }
 
           throw error
@@ -32,5 +32,5 @@ export default opts => {
   }
   create()
 
-  return (method, args) => call(method, args)
+  return (...args) => call(...args)
 }

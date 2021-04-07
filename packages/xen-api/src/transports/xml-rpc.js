@@ -39,5 +39,9 @@ export default ({ secureOptions, url: { hostname, port, protocol } }) => {
   })
   const call = promisify(client.methodCall, client)
 
-  return (method, args) => call(method, prepareXmlRpcParams(args)).then(parseResult, logError)
+  return (method, args, cancelToken) =>
+    new Promise((resolve, reject) => {
+      call(method, prepareXmlRpcParams(args), cancelToken).then(resolve, reject)
+      cancelToken.addHandler(reject)
+    }).then(parseResult, logError)
 }
