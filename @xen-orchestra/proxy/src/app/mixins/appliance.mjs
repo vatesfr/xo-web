@@ -1,12 +1,12 @@
 import Disposable from 'promise-toolbox/Disposable.js'
 import fromCallback from 'promise-toolbox/fromCallback.js'
 import fromEvent from 'promise-toolbox/fromEvent.js'
+import fse from 'fs-extra'
 import JsonRpcWebsocketClient from 'jsonrpc-websocket-client'
 import parsePairs from 'parse-pairs'
 import { createLogger } from '@xen-orchestra/log'
 import { deduped } from '@vates/disposable/deduped.js'
 import { execFile, spawn } from 'child_process'
-import { readFile } from 'fs-extra'
 
 const TUNNEL_SERVICE = 'xoa-support-tunnel.service'
 
@@ -75,7 +75,7 @@ async function closeSupportTunnel() {
 }
 
 async function getApplianceInfo() {
-  const pairs = parsePairs(await readFile('/etc/os-release', 'utf8'))
+  const pairs = parsePairs(await fse.readFile('/etc/os-release', 'utf8'))
   return {
     build: pairs.XOA_BUILD,
     os: pairs.ID,
@@ -103,7 +103,7 @@ async function getStateSupportTunnel() {
 
   return {
     open: isActive,
-    stdout: isActiveOrFailed ? await fromCallback(readFile, '/tmp/xoa-support-tunnel.out', 'utf8') : '',
+    stdout: isActiveOrFailed ? await fromCallback(fse.readFile, '/tmp/xoa-support-tunnel.out', 'utf8') : '',
   }
 }
 

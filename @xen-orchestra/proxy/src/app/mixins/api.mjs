@@ -12,8 +12,6 @@ import Router from '@koa/router'
 import Zone from 'node-zone'
 import { createLogger } from '@xen-orchestra/log'
 
-import { version as serverVersion } from '../../../package.json'
-
 const { debug, warn } = createLogger('xo:proxy:api')
 
 const ndJsonStream = asyncIteratorToStream(async function* (responseId, iterable) {
@@ -28,7 +26,7 @@ const ndJsonStream = asyncIteratorToStream(async function* (responseId, iterable
 })
 
 export default class Api {
-  constructor(app, { httpServer }) {
+  constructor(app, { appVersion, httpServer }) {
     this._ajv = new Ajv({ allErrors: true })
     this._methods = { __proto__: null }
 
@@ -121,7 +119,7 @@ export default class Api {
           },
         ],
         getServerVersion: [
-          () => serverVersion,
+          () => appVersion,
           {
             description: 'returns the version of xo-server',
           },

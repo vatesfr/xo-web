@@ -23,7 +23,7 @@
     "xo-proxy": "dist/index.js"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14.13"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.0",
@@ -73,10 +73,11 @@
     "@vates/toggle-scripts": "^1.0.0",
     "babel-plugin-transform-dev": "^2.0.1",
     "cross-env": "^7.0.2",
-    "index-modules": "^0.3.0"
+    "index-modules": "^0.4.0",
+    "rimraf": "^3.0.0"
   },
   "scripts": {
-    "_build": "index-modules --cjs-lazy src/app/mixins && babel --delete-dir-on-start --source-maps --out-dir=dist/ src/",
+    "_build": "index-modules --index-file index.mjs src/app/mixins && babel --delete-dir-on-start --keep-file-extension --source-maps --out-dir=dist/ src/",
     "build": "cross-env NODE_ENV=production yarn run _build",
     "dev": "cross-env NODE_ENV=development yarn run _build --watch",
     "_postinstall": "./scripts/systemd-service-installer",

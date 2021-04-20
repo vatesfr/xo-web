@@ -11,7 +11,7 @@
 /packages/*/dist/
 /packages/*/node_modules/
 
-/@xen-orchestra/proxy/src/app/mixins/index.js
+/@xen-orchestra/proxy/src/app/mixins/index.mjs
 
 /packages/vhd-cli/src/commands/index.js
 

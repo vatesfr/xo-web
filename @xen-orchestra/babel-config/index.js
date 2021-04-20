@@ -32,15 +32,15 @@ const getConfig = (key, ...args) => {
 // some plugins must be used in a specific order
 const pluginsOrder = ['@babel/plugin-proposal-decorators', '@babel/plugin-proposal-class-properties']
 
-module.exports = function (pkg, plugins, presets) {
-  plugins === undefined && (plugins = {})
-  presets === undefined && (presets = {})
+module.exports = function (pkg, configs = {}) {
+  const plugins = {}
+  const presets = {}
 
   Object.keys(pkg.devDependencies || {}).forEach(name => {
     if (!(name in presets) && PLUGINS_RE.test(name)) {
-      plugins[name] = getConfig(name, pkg)
+      plugins[name] = { ...getConfig(name, pkg), ...configs[name] }
     } else if (!(name in presets) && PRESETS_RE.test(name)) {
-      presets[name] = getConfig(name, pkg)
+      presets[name] = { ...getConfig(name, pkg), ...configs[name] }
     }
   })
 

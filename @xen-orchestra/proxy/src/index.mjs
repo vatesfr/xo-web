@@ -1,22 +1,30 @@
 #!/usr/bin/env node
 
-const APP_NAME = 'xo-proxy'
-const APP_DIR = require('path').join(__dirname, '..')
+import forOwn from 'lodash/forOwn.js'
+import fse from 'fs-extra'
+import getopts from 'getopts'
+import pRetry from 'promise-toolbox/retry.js'
+import { catchGlobalErrors } from '@xen-orchestra/log/configure.js'
+import { create as createServer } from 'http-server-plus'
+import { createLogger } from '@xen-orchestra/log'
+import { createSecureServer } from 'http2'
+import { genSelfSignedCert } from '@xen-orchestra/self-signed'
+import { load as loadConfig } from 'app-conf'
 
 // -------------------------------------------------------------------
 
-{
-  const { catchGlobalErrors } = require('@xen-orchestra/log/configure.js')
+catchGlobalErrors(createLogger('xo:proxy'))
 
-  catchGlobalErrors(require('@xen-orchestra/log').createLogger('xo:proxy'))
-}
+const { fatal, info, warn } = createLogger('xo:proxy:bootstrap')
 
-const { fatal, info, warn } = require('@xen-orchestra/log').createLogger('xo:proxy:bootstrap')
+const APP_DIR = new URL('..', import.meta.url).pathname
+const APP_NAME = 'xo-proxy'
+const APP_VERSION = JSON.parse(fse.readFileSync(new URL('../package.json', import.meta.url))).version
 
 // -------------------------------------------------------------------
 
 const main = async args => {
-  const opts = require('getopts')(args, {
+  const opts = getopts(args, {
     boolean: ['help', 'safe-mode'],
     alias: {
       help: ['h'],
@@ -24,12 +32,11 @@ const main = async args => {
   })
 
   if (opts.help) {
-    const { name, version } = require('../package.json')
     // eslint-disable-next-line no-console
     console.log(
       '%s',
       `
-${name} v${version}
+${APP_NAME} v${APP_VERSION}
 `
     )
     return
@@ -37,36 +44,31 @@ ${name} v${version}
 
   info('starting')
 
-  const config = await require('app-conf').load(APP_NAME, {
+  const config = await loadConfig(APP_NAME, {
     appDir: APP_DIR,
     ignoreUnknownFormats: true,
   })
 
-  let httpServer = new (require('http-server-plus'))({
-    createSecureServer: (({ createSecureServer }) => opts => createSecureServer({ ...opts, allowHTTP1: true }))(
-      require('http2')
-    ),
+  let httpServer = createServer({
+    createSecureServer: opts => createSecureServer({ ...opts, allowHTTP1: true }),
   })
 
-  const { readFileSync, outputFileSync, unlinkSync } = require('fs-extra')
-  const retry = require('promise-toolbox/retry.js')
-
-  require('lodash/forOwn.js')(config.http.listen, async ({ autoCert, cert, key, ...opts }) => {
+  forOwn(config.http.listen, async ({ autoCert, cert, key, ...opts }) => {
     try {
-      const niceAddress = await retry(
+      const niceAddress = await pRetry(
         async () => {
           if (cert !== undefined && key !== undefined) {
             try {
-              opts.cert = readFileSync(cert)
-              opts.key = readFileSync(key)
+              opts.cert = fse.readFileSync(cert)
+              opts.key = fse.readFileSync(key)
             } catch (error) {
               if (!(autoCert && error.code === 'ENOENT')) {
                 throw error
               }
 
-              const pems = await require('@xen-orchestra/self-signed').genSelfSignedCert()
-              outputFileSync(cert, pems.cert, { flag: 'wx', mode: 0o400 })
-              outputFileSync(key, pems.key, { flag: 'wx', mode: 0o400 })
+              const pems = await genSelfSignedCert()
+              fse.outputFileSync(cert, pems.cert, { flag: 'wx', mode: 0o400 })
+              fse.outputFileSync(key, pems.key, { flag: 'wx', mode: 0o400 })
               info('new certificate generated', { cert, key })
               opts.cert = pems.cert
               opts.key = pems.key
@@ -80,8 +82,8 @@ ${name} v${version}
           when: e => autoCert && e.code === 'ERR_SSL_EE_KEY_TOO_SMALL',
           onRetry: () => {
             warn('deleting invalid certificate')
-            unlinkSync(cert)
-            unlinkSync(key)
+            fse.unlinkSync(cert)
+            fse.unlinkSync(key)
           },
         }
       )
@@ -112,24 +114,25 @@ ${name} v${version}
     // The default value of 10 appears to be too small for interesting traces in xo-proxy.
     Error.stackTraceLimit = 20
 
-    require('source-map-support/register.js')
+    await import('source-map-support/register.js')
   } catch (error) {
     warn(error)
   }
 
-  httpServer = require('stoppable')(httpServer)
+  httpServer = (await import('stoppable')).default(httpServer)
 
-  const App = require('./app/index.js').default
+  const { default: App } = await import('./app/index.mjs')
   const app = new App({
     appDir: APP_DIR,
     appName: APP_NAME,
+    appVersion: APP_VERSION,
     config,
     httpServer,
     safeMode: opts['--safe-mode'],
   })
 
   // dont delay require to stopping phase because deps may no longer be there (eg on uninstall)
-  const fromCallback = require('promise-toolbox/fromCallback.js')
+  const { default: fromCallback } = await import('promise-toolbox/fromCallback.js')
   app.hooks.on('stop', () => fromCallback(cb => httpServer.stop(cb)))
 
   await app.hooks.start()
@@ -149,7 +152,7 @@ ${name} v${version}
     })
   })
 
-  return require('promise-toolbox/fromEvent.js')(app.hooks, 'stopped')
+  return (await import('promise-toolbox/fromEvent.js')).default(app.hooks, 'stopped')
 }
 main(process.argv.slice(2)).then(
   () => {

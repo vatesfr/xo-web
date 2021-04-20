@@ -1,9 +1,9 @@
+import fse from 'fs-extra'
 import xdg from 'xdg-basedir'
 import { createLogger } from '@xen-orchestra/log'
 import { execFileSync } from 'child_process'
-import { outputFileSync } from 'fs-extra'
 
-import { Profile } from '../_Profile.js'
+import { Profile } from '../_Profile.mjs'
 
 const { warn } = createLogger('xo:proxy:authentication')
 
@@ -20,7 +20,7 @@ export default class Authentication {
 
       try {
         // save this token in the automatically handled conf file
-        outputFileSync(
+        fse.outputFileSync(
           // this file must take precedence over normal user config
           `${xdg.config}/${appName}/config.z-auto.json`,
           JSON.stringify({ authenticationToken: token }),
