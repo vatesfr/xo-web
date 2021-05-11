@@ -76,11 +76,11 @@ const App = withState<State, Props, Effects, Computed, ParentState, ParentEffect
   },
   ({ state }) => (
     <IntlProvider messages={messagesEn} locale='en'>
+      <Modal />
       {!state.connected || !state.objectsFetched ? (
         <Signin />
       ) : (
         <Router>
-          <Modal />
           <Switch>
             <Route exact path='/styleguide'><StyleGuide /></Route>
             <Route exact path='/'>

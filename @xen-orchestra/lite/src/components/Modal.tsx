@@ -3,21 +3,32 @@ import { FormattedMessage } from 'react-intl'
 import { withState } from 'reaclette'
 
 import Button from './Button'
+import styled from 'styled-components'
 
-interface GeneralPropsModal {
+interface GeneralParamsModal {
   message: JSX.Element
   title: JSX.Element
 }
 
-interface PropsModal extends GeneralPropsModal {
-  onReject: (reason: unknown) => void
-  onSuccess: (value: unknown) => void
+interface ParamsModal extends GeneralParamsModal {
+  onReject: (reason?: unknown) => void
+  onSuccess: (value: string) => void
 }
 
-export const confirm = ({ message, title }: GeneralPropsModal) =>
+const StyledModal = styled.div`
+  background-color: white;
+  border: 2px solid black;
+  left: 50%;
+  padding: 15px;
+  position: absolute;
+  top: 20%;
+  transform: translate(-50%, -50%);
+`
+
+export const confirm = ({ message, title }: GeneralParamsModal): Promise<string> =>
   new Promise((resolve, reject) => modal({ message, onReject: reject, onSuccess: resolve, title }))
 
-const modal = ({ message, onReject, onSuccess, title }: PropsModal) => {
+const modal = ({ message, onReject, onSuccess, title }: ParamsModal) => {
   if (instance === undefined) {
     throw new Error('No modal instance')
   }
@@ -29,21 +40,12 @@ const modal = ({ message, onReject, onSuccess, title }: PropsModal) => {
   instance.state.title = title
 }
 
-const STYLES_MODAL: React.CSSProperties = {
-  backgroundColor: 'lightgrey',
-  border: '1px solid black',
-  left: '50%',
-  position: 'absolute',
-  top: '20%',
-  transform: 'translate(-50%,-50%)',
-}
-
 interface ParentState {}
 
 interface State {
   message?: JSX.Element
-  onReject?: (reason: unknown) => void
-  onSuccess?: (value: unknown) => void
+  onReject?: () => void
+  onSuccess?: (value: string) => void
   showModal: boolean
   title?: JSX.Element
 }
@@ -77,18 +79,15 @@ const Modal = withState<State, Props, Effects, Computed, ParentState, ParentEffe
         }
         instance = this
       },
-      finalize: function () {
-        instance = undefined
-      },
       _closeModal: function () {
         this.state.showModal = false
       },
       _reject: function () {
-        this.state.onReject!('Normal reject')
+        this.state.onReject?.()
         this.effects._closeModal()
       },
       _success: function () {
-        this.state!.onSuccess!('Success')
+        this.state.onSuccess?.('Success')
         this.effects._closeModal()
       },
     },
@@ -97,7 +96,7 @@ const Modal = withState<State, Props, Effects, Computed, ParentState, ParentEffe
     const { _reject, _success } = effects
     const { message, showModal, title } = state
     return showModal ? (
-      <div style={STYLES_MODAL}>
+      <StyledModal>
         <p>{title}</p>
         <p>{message}</p>
         <footer>
@@ -108,7 +107,7 @@ const Modal = withState<State, Props, Effects, Computed, ParentState, ParentEffe
             <FormattedMessage id='cancel' />
           </Button>
         </footer>
-      </div>
+      </StyledModal>
     ) : null
   }
 )
