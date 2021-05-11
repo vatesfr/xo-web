@@ -3,5 +3,6 @@
   "device": "Device",
   "DNS": "DNS",
   "gateway": "Gateway",
-  "IP": "IP"
+  "IP": "IP",
+  "noData": "No data to show"
 }
