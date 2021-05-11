@@ -1,9 +1,9 @@
 import React from 'react'
+import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 import { withState } from 'reaclette'
 
 import Button from './Button'
-import styled from 'styled-components'
 
 interface GeneralParamsModal {
   message: JSX.Element
