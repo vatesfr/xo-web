@@ -291,6 +291,16 @@ export class Xapi extends EventEmitter {
     return this._roCall(`${type}.get_${field}`, [ref])
   }
 
+  async getFields(type, ref, fields) {
+    const values = {}
+    await Promise.all(
+      fields.map(async field => {
+        values[field] = await this._sessionCall(`${type}.get_${field}`, [ref])
+      })
+    )
+    return this._wrapRecord(type, ref, values)
+  }
+
   setField(type, ref, field, value) {
     return this.call(`${type}.set_${field}`, ref, value).then(noop)
   }

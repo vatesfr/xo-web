@@ -1,4 +1,5 @@
 const assert = require('assert')
+// const asyncFn = require('promise-toolbox/asyncFn')
 const findLast = require('lodash/findLast.js')
 const ignoreErrors = require('promise-toolbox/ignoreErrors.js')
 const keyBy = require('lodash/keyBy.js')
@@ -143,6 +144,7 @@ exports.VmBackup = class VmBackup {
 
     const doSnapshot =
       this._isDelta || (!settings.offlineBackup && vm.power_state === 'Running') || settings.snapshotRetention !== 0
+    console.log({ doSnapshot })
     if (doSnapshot) {
       await Task.run({ name: 'snapshot' }, async () => {
         if (!settings.bypassVdiChainsCheck) {
@@ -181,6 +183,7 @@ exports.VmBackup = class VmBackup {
     await this._callWriters(writer => writer.prepare({ isFull }), 'writer.prepare()')
 
     const deltaExport = await exportDeltaVm(exportedVm, baseVm, {
+      cancelToken: Task.cancelToken,
       fullVdisRequired,
     })
     const sizeContainers = mapValues(deltaExport.streams, stream => watchStreamSize(stream))
@@ -226,6 +229,7 @@ exports.VmBackup = class VmBackup {
   async _copyFull() {
     const { compression } = this.job
     const stream = await this._xapi.VM_export(this.exportedVm.$ref, {
+      cancelToken: Task.cancelToken,
       compress: Boolean(compression) && (compression === 'native' ? 'gzip' : 'zstd'),
       useSnapshot: false,
     })
@@ -330,10 +334,22 @@ exports.VmBackup = class VmBackup {
 
     this._baseVm = baseVm
     this._fullVdisRequired = fullVdisRequired
+
+    Task.info('base data', {
+      vm: baseVm.uuid,
+      fullVdisRequired: Array.from(fullVdisRequired),
+    })
   }
 
   run = defer(this.run)
   async run($defer) {
+    this.exportedVm = this.vm
+    this.timestamp = Date.now()
+
+    const doSnapshot = this._isDelta || vm.power_state === 'Running' || settings.snapshotRetention !== 0
+    if (!this._isDelta) {
+    }
+
     const settings = this._settings
     assert(
       !settings.offlineBackup || settings.snapshotRetention === 0,
@@ -380,3 +396,6 @@ exports.VmBackup = class VmBackup {
     }
   }
 }
+
+// const { prototype } = exports.VmBackup
+// prototype.run = asyncFn.cancelable(prototype.run)

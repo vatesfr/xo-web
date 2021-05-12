@@ -140,6 +140,16 @@ ${pkg.name} v${pkg.version}`
     }
   }
 
+  const $import = ({ $import: path }) => {
+    const data = fs.readFileSync(path, 'utf8')
+    const ext = extname(path).slice(1).toLowerCase()
+    const parse = FORMATS[ext]
+    if (parse === undefined) {
+      throw new Error(`unsupported file: ${path}`)
+    }
+    return visit(parse(data))
+  }
+
   const seq = async seq => {
     const j = callPath.length
     for (let i = 0, n = seq.length; i < n; ++i) {
@@ -153,17 +163,13 @@ ${pkg.name} v${pkg.version}`
     if (Array.isArray(node)) {
       return seq(node)
     }
-    return call(node)
+    const keys = Object.keys(node)
+    return keys.length === 1 && keys[0] === '$import' ? $import(node) : call(node)
   }
 
+  let node
   if (file !== '') {
-    const data = fs.readFileSync(file, 'utf8')
-    const ext = extname(file).slice(1).toLowerCase()
-    const parse = FORMATS[ext]
-    if (parse === undefined) {
-      throw new Error(`unsupported file: ${file}`)
-    }
-    await visit(parse(data))
+    node = { $import: file }
   } else {
     const method = args[0]
     const params = {}
@@ -176,8 +182,9 @@ ${pkg.name} v${pkg.version}`
       params[param.slice(0, j)] = parseValue(param.slice(j + 1))
     }
 
-    await call({ method, params })
+    node = { method, params }
   }
+  await visit(node)
 }
 main(process.argv.slice(2)).then(
   () => {

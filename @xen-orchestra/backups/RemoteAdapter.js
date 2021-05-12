@@ -543,6 +543,40 @@ class RemoteAdapter {
   async readVmBackupMetadata(path) {
     return Object.defineProperty(JSON.parse(await this._handler.readFile(path)), '_filename', { value: path })
   }
+
+  async writeFullVmBackup({ jobId, mode, scheduleId, timestamp, vm, vmSnapshot, xva }, sizeContainer, stream) {
+    const basename = formatFilenameDate(timestamp)
+
+    const dataBasename = basename + '.xva'
+    const dataFilename = backupDir + '/' + dataBasename
+
+    const metadataFilename = `${backupDir}/${basename}.json`
+    const metadata = {
+      jobId: job.id,
+      mode: job.mode,
+      scheduleId,
+      timestamp,
+      version: '2.0.0',
+      vm,
+      vmSnapshot: this._backup.exportedVm,
+      xva: './' + dataBasename,
+    }
+
+    const { deleteFirst } = settings
+    if (deleteFirst) {
+      await deleteOldBackups()
+    }
+
+    await adapter.outputStream(stream, dataFilename, {
+      validator: tmpPath => {
+        if (handler._getFilePath !== undefined) {
+          return isValidXva(handler._getFilePath('/' + tmpPath))
+        }
+      },
+    })
+    metadata.size = sizeContainer.size
+    await handler.outputFile(metadataFilename, JSON.stringify(metadata))
+  }
 }
 
 Object.assign(RemoteAdapter.prototype, {

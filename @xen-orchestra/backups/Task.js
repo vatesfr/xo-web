@@ -1,8 +1,11 @@
 const CancelToken = require('promise-toolbox/CancelToken.js')
 const Zone = require('node-zone')
 
-const logAfterEnd = () => {
-  throw new Error('task has already ended')
+const logAfterEnd = function (log) {
+  const error = new Error('task has already ended:' + this.id)
+  error.result = log.result
+  error.log = log
+  throw error
 }
 
 const noop = Function.prototype
@@ -44,10 +47,18 @@ class Task {
     }
   }
 
+  get id() {
+    return this.#id
+  }
+
   #cancelToken
   #id = Math.random().toString(36).slice(2)
   #onLog
   #zone
+
+  get id() {
+    return this.#id
+  }
 
   constructor({ name, data, onLog }) {
     let parentCancelToken, parentId
@@ -100,6 +111,8 @@ class Task {
   run(fn, last = false) {
     return this.#zone.run(() => {
       try {
+        this.#cancelToken.throwIfRequested()
+
         const result = fn()
         let then
         if (result != null && typeof (then = result.then) === 'function') {

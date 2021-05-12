@@ -22,7 +22,13 @@
 > Packages will be released in the order they are here, therefore, they should
 > be listed by inverse order of dependency.
 >
-> Rule of thumb: add packages on top.
+> Global order:
+>
+> - @vates/...
+> - @xen-orchestra/...
+> - xo-server-...
+> - xo-server
+> - xo-web
 >
 > The format is the following: - `$packageName` `$version`
 >

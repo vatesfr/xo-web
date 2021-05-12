@@ -1,3 +1,5 @@
+import Cancel from 'promise-toolbox/Cancel'
+import CancelToken from 'promise-toolbox/CancelToken'
 import Disposable from 'promise-toolbox/Disposable.js'
 import fromCallback from 'promise-toolbox/fromCallback.js'
 import { asyncMap } from '@xen-orchestra/async-map'
@@ -95,7 +97,8 @@ export default class Backups {
           error.jobId = jobId
           throw error
         }
-        runningJobs[jobId] = true
+        const source = CancelToken.source()
+        runningJobs[jobId] = source.cancel
         try {
           return await run.apply(this, arguments)
         } finally {

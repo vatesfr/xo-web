@@ -18,6 +18,17 @@ const wrapCall = (fn, arg, thisArg) => {
  * @returns {Promise<Item[]>}
  */
 exports.asyncMap = function asyncMap(iterable, mapFn, thisArg = iterable) {
+  let onError
+  if (onError !== undefined) {
+    const original = mapFn
+    mapFn = async function () {
+      try {
+        return await original.apply(this, arguments)
+      } catch (error) {
+        return onError.call(this, error, ...arguments)
+      }
+    }
+  }
   return Promise.all(Array.from(iterable, mapFn, thisArg))
 }
 
