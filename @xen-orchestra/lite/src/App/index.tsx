@@ -10,7 +10,9 @@ import messagesEn from '../lang/en.json'
 import Signin from './Signin/index'
 import StyleGuide from './StyleGuide/index'
 import TabConsole from './TabConsole'
-import XapiConnection, { ObjectsByType, Vm } from '../libs/xapi'
+import TreeItem from '../components/TreeItem'
+import TreeView from '../components/TreeView'
+import XapiConnection, { ObjectsByType, Vm, Host, Pool } from '../libs/xapi'
 
 interface ParentState {
   objectsByType: ObjectsByType
@@ -36,6 +38,12 @@ interface Computed {
   objectsFetched: boolean
   url: string
   vms?: Map<string, Vm>
+  pools?: Map<string, Pool>
+  hosts?: Map<string, Host>
+  vmsByContainer?: Map<string, Vm>
+  hostsByPool?: Map<string, Host>
+  vmsByRef?: Map<string, Vm>
+  vmsByPool?: Map<string, Vm>
 }
 
 const App = withState<State, Props, Effects, Computed, ParentState, ParentEffects>(
@@ -118,8 +126,46 @@ const App = withState<State, Props, Effects, Computed, ParentState, ParentEffect
           </Button>
           <Router>
             <Switch>
-              <Route exact path='/styleguide'><StyleGuide /></Route>
+              <Route exact path='/styleguide'>
+                <StyleGuide />
+              </Route>
               <Route exact path='/'>
+                <p>There are {state.objectsByType?.size || 0} types!</p>
+                {state.pools !== undefined && (
+                  <>
+                    <p>There are {state.pools.size} Pools!</p>
+                    <TreeView>
+                      {state.pools.valueSeq().map((pool: Pool) => {
+                        let hosts
+                        return (
+                          <TreeItem key={pool.$id} id={pool.$id} label={pool.name_label}>
+                            {state.hostsByPool !== undefined &&
+                            (hosts = state.hostsByPool.get(pool.$id)) &&
+                            hosts === undefined
+                              ? null
+                              : hosts.map(host => (
+                                  <TreeItem key={host.$id} id={host.$id} label={host.name_label}>
+                                    {host.resident_VMs.map(vmRef => {
+                                      const vm = state.vmsByRef !== undefined ? state.vmsByRef.get(vmRef) : undefined
+                                      return vm !== undefined ? (
+                                        <TreeItem key={vm.$id} id={vm.$id} label={vm.name_label} />
+                                      ) : null
+                                    })}
+                                  </TreeItem>
+                                ))}
+                            {state.vmsByPool !== undefined &&
+                              state.vmsByPool.get(pool.$id) !== undefined &&
+                              state.vmsByPool.get(pool.$id).map((vm: Vm) => {
+                                return vm.power_state === 'Running' ? null : (
+                                  <TreeItem key={vm.$id} id={vm.$id} label={vm.name_label} />
+                                )
+                              })}
+                          </TreeItem>
+                        )
+                      })}
+                    </TreeView>
+                  </>
+                )}
                 <p>There are {state.objectsByType?.size || 0} types!</p>
                 {state.vms !== undefined && (
                   <>
