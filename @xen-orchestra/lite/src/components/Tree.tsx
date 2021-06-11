@@ -16,12 +16,12 @@ interface Effects {}
 
 interface Computed {}
 
-const StyledUl = styled.ul`
+const Ul = styled.ul`
   list-style-type: none;
 `
 
-const TreeView = withState<State, Props, Effects, Computed, ParentState, ParentEffects>({}, ({ children }) => (
-  <StyledUl>{children}</StyledUl>
+const Tree = withState<State, Props, Effects, Computed, ParentState, ParentEffects>({}, ({ children }) => (
+  <Ul>{children}</Ul>
 ))
 
-export default TreeView
+export default Tree
