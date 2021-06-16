@@ -11,6 +11,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
+    "@material-ui/core": "^4.11.4",
     "@novnc/novnc": "^1.2.0",
     "@types/immutable": "^3.8.7",
     "@types/js-cookie": "^2.2.6",

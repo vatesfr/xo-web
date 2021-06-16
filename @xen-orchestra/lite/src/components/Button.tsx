@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { withState } from 'reaclette'
+import MuiButton from '@material-ui/core/Button'
 
 import Icon, { IconName } from '../components/Icon'
 
@@ -30,10 +31,10 @@ const StyledButton = styled.button`
 const Button = withState<State, Props, Effects, Computed, ParentState, ParentEffects>(
   {},
   ({ state, effects, resetState, icon, children, ...props }) => (
-    <StyledButton {...props}>
+    <MuiButton variant="contained" color="primary" {...props}>
       {icon !== undefined && <><Icon icon={icon} /> </>}
       {children}
-    </StyledButton>
+    </MuiButton>
   )
 )
 
