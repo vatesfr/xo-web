@@ -1,16 +1,17 @@
 import Cookies from 'js-cookie'
 import React from 'react'
+import styled from 'styled-components'
 import { FormattedMessage, IntlProvider } from 'react-intl'
-import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import { Map } from 'immutable'
+import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import { withState } from 'reaclette'
 
 import Button from '../components/Button'
+import ListObjects from './ListObjects'
 import messagesEn from '../lang/en.json'
 import Signin from './Signin/index'
 import StyleGuide from './StyleGuide/index'
 import TabConsole from './TabConsole'
-import XapiConnection, { ObjectsByType, Vm } from '../libs/xapi'
+import XapiConnection, { ObjectsByType } from '../libs/xapi'
 
 interface ParentState {
   objectsByType: ObjectsByType
@@ -35,8 +36,28 @@ interface Effects {
 interface Computed {
   objectsFetched: boolean
   url: string
-  vms?: Map<string, Vm>
 }
+
+const LeftView = styled.div`
+  width: 24%;
+  height: 100%;
+  float: left;
+`
+
+const RightView = styled.div`
+  width: 75%;
+  background-color: green;
+  height: 100%;
+  float: left;
+`
+const VerticalLine = styled.div`
+  margin: 0;
+  padding: 0;
+  border-left-width: thick;
+  border-left: double;
+  height: 1000px;
+  float: left;
+`
 
 const App = withState<State, Props, Effects, Computed, ParentState, ParentEffects>(
   {
@@ -96,53 +117,42 @@ const App = withState<State, Props, Effects, Computed, ParentState, ParentEffect
     },
     computed: {
       objectsFetched: state => state.objectsByType !== undefined,
-      vms: state =>
-        state.objectsFetched
-          ? state.objectsByType
-              ?.get('VM')
-              ?.filter((vm: Vm) => !vm.is_control_domain && !vm.is_a_snapshot && !vm.is_a_template)
-          : undefined,
       url: state => `${window.location.protocol}//${state.xapiHostname}`,
     },
   },
-  ({ effects, state }) => (
-    <IntlProvider messages={messagesEn} locale='en'>
-      {!state.connected ? (
-        <Signin />
-      ) : !state.objectsFetched ? (
-        <FormattedMessage id='loading' />
-      ) : (
-        <>
-          <Button onClick={() => effects.disconnect()}>
-            <FormattedMessage id='disconnect' />
-          </Button>
-          <Router>
-            <Switch>
-              <Route exact path='/styleguide'><StyleGuide /></Route>
-              <Route exact path='/'>
-                <p>There are {state.objectsByType?.size || 0} types!</p>
-                {state.vms !== undefined && (
-                  <>
-                    <p>There are {state.vms.size} VMs!</p>
-                    <ul>
-                      {state.vms.valueSeq().map((vm: Vm) => (
-                        <li key={vm.$id}>
-                          <Link to={vm.$id}>
-                            {vm.name_label} - {vm.name_description} ({vm.power_state})
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-              </Route>
-              <Route path='/:id' render={({ match }) => <TabConsole vmId={match.params.id} />} />
-            </Switch>
-          </Router>
-        </>
-      )}
-    </IntlProvider>
-  )
+  ({ effects, state }) => {
+    return (
+      <IntlProvider messages={messagesEn} locale='en'>
+        {!state.connected ? (
+          <Signin />
+        ) : !state.objectsFetched ? (
+          <FormattedMessage id='loading' />
+        ) : (
+          <>
+            <Button onClick={() => effects.disconnect()}>
+              <FormattedMessage id='disconnect' />
+            </Button>
+            <Router>
+              <Switch>
+                <Route exact path='/styleguide'>
+                  <StyleGuide />
+                </Route>
+                <Route exact path='/'>
+                  <LeftView>
+                    <ListObjects />
+                  </LeftView>
+                  <VerticalLine />
+                  <RightView>
+                    <Route path='/:id/console' render={({ match }) => <TabConsole vmId={match.params.id} />} />
+                  </RightView>
+                </Route>
+              </Switch>
+            </Router>
+          </>
+        )}
+      </IntlProvider>
+    )
+  }
 )
 
 export default App
