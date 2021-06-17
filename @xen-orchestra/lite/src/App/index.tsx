@@ -50,14 +50,6 @@ const RightView = styled.div`
   height: 100%;
   float: left;
 `
-const VerticalLine = styled.div`
-  margin: 0;
-  padding: 0;
-  border-left-width: thick;
-  border-left: double;
-  height: 1000px;
-  float: left;
-`
 
 const App = withState<State, Props, Effects, Computed, ParentState, ParentEffects>(
   {
@@ -121,36 +113,49 @@ const App = withState<State, Props, Effects, Computed, ParentState, ParentEffect
     },
   },
   ({ effects, state }) => {
+    const _listObjects = (
+      <LeftView>
+        <ListObjects />
+      </LeftView>
+    )
+
     return (
-      <IntlProvider messages={messagesEn} locale='en'>
-        {!state.connected ? (
-          <Signin />
-        ) : !state.objectsFetched ? (
-          <FormattedMessage id='loading' />
-        ) : (
-          <>
-            <Button onClick={() => effects.disconnect()}>
-              <FormattedMessage id='disconnect' />
-            </Button>
-            <Router>
-              <Switch>
-                <Route exact path='/styleguide'>
-                  <StyleGuide />
-                </Route>
-                <Route exact path='/'>
-                  <LeftView>
-                    <ListObjects />
-                  </LeftView>
-                  <VerticalLine />
-                  <RightView>
-                    <Route path='/:id/console' render={({ match }) => <TabConsole vmId={match.params.id} />} />
-                  </RightView>
-                </Route>
-              </Switch>
-            </Router>
-          </>
-        )}
-      </IntlProvider>
+      <>
+        <IntlProvider messages={messagesEn} locale='en'>
+          {!state.connected ? (
+            <Signin />
+          ) : !state.objectsFetched ? (
+            <FormattedMessage id='loading' />
+          ) : (
+            <>
+              <Button onClick={() => effects.disconnect()}>
+                <FormattedMessage id='disconnect' />
+              </Button>
+              <Router>
+                <Switch>
+                  <Route exact path='/styleguide'>
+                    <StyleGuide />
+                  </Route>
+                  <Route exact path='/'>
+                    {_listObjects}
+                  </Route>
+                  <Route
+                    path='/:id/console'
+                    render={({ match }) => (
+                      <>
+                        {_listObjects}
+                        <RightView>
+                          <TabConsole vmId={match.params.id} />
+                        </RightView>
+                      </>
+                    )}
+                  />
+                </Switch>
+              </Router>
+            </>
+          )}
+        </IntlProvider>
+      </>
     )
   }
 )
