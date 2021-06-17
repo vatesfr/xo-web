@@ -54,6 +54,7 @@ const ListObjects = withState<State, Props, Effects, Computed, ParentState, Pare
     },
   },
   ({ state }) => {
+    // TODO: send collection instead of JSX elements
     return (
       state.pools !== undefined && (
         <>
