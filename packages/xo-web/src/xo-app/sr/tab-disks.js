@@ -9,9 +9,9 @@ import Link from 'link'
 import MigrateVdiModalBody from 'xo/migrate-vdi-modal'
 import PropTypes from 'prop-types'
 import React from 'react'
-import renderXoItem from 'render-xo-item'
 import SortedTable from 'sorted-table'
 import TabButton from 'tab-button'
+import renderXoItem, { Vdi } from 'render-xo-item'
 import { confirm } from 'modal'
 import { injectIntl } from 'react-intl'
 import { Text } from 'editable'
@@ -37,20 +37,45 @@ import {
 import { error } from 'notification'
 
 // ===================================================================
+const VDIS_BY_BASE_COPY = {}
 
 const COLUMNS = [
   {
     name: _('vdiNameLabel'),
-    itemRenderer: vdi => (
-      <span>
-        <Text value={vdi.name_label} onChange={value => editVdi(vdi, { name_label: value })} />{' '}
-        {vdi.type === 'VDI-snapshot' && (
-          <span className='tag tag-info'>
-            <Icon icon='vm-snapshot' />
-          </span>
-        )}
-      </span>
-    ),
+    itemRenderer: vdi => {
+      const baseCopy = VDIS_BY_BASE_COPY[vdi.uuid]
+      let numberOfActiveVdis
+      if (baseCopy !== undefined) {
+        numberOfActiveVdis = baseCopy.length
+      }
+      return (
+        <span>
+          <Text value={vdi.name_label} onChange={value => editVdi(vdi, { name_label: value })} />{' '}
+          {vdi.type === 'VDI-snapshot' && (
+            <span className='tag tag-info'>
+              <Icon icon='vm-snapshot' />
+            </span>
+          )}
+          {vdi.type === 'VDI-unmanaged' &&
+            (baseCopy !== undefined ? (
+              <span>
+                (
+                <Link
+                  to={`/srs/${baseCopy[0].$SR}/disks?s=${encodeURIComponent(
+                    `uuid:|(${baseCopy.map(activeVdi => activeVdi.uuid).join(' ')})`
+                  )}`}
+                >
+                  <Vdi id={baseCopy[0].id} showSize={numberOfActiveVdis === 1} />
+                  {`${numberOfActiveVdis > 1 ? ` and ${numberOfActiveVdis - 1} more` : ''}`}
+                </Link>
+                )
+              </span>
+            ) : (
+              <span>({_('noActiveVdi')})</span>
+            ))}
+        </span>
+      )
+    },
     sortCriteria: vdi => vdi.name_label,
   },
   {
@@ -349,9 +374,44 @@ export default class SrDisks extends Component {
     },
   ]
 
+  _setVdisByBaseCopy = createSelector(
+    () => this.props.vdis,
+    () => this.props.unmanagedVdis,
+    (vdis, unmanagedVdis) => {
+      Object.keys(VDIS_BY_BASE_COPY).map(k => delete VDIS_BY_BASE_COPY[k])
+
+      vdis.forEach(activeVdi => {
+        if (activeVdi.parent === undefined) {
+          return
+        }
+
+        let baseCopy = unmanagedVdis.find(vdi => activeVdi.parent === vdi.uuid)
+        let iterate = true
+        while (iterate) {
+          const baseCopyUuid = baseCopy.uuid
+          const currentBaseCopy = VDIS_BY_BASE_COPY[baseCopyUuid]
+
+          if (currentBaseCopy !== undefined) {
+            VDIS_BY_BASE_COPY[baseCopyUuid] = [...currentBaseCopy, activeVdi]
+          } else {
+            VDIS_BY_BASE_COPY[baseCopyUuid] = [activeVdi]
+          }
+
+          if (baseCopy.parent !== undefined) {
+            baseCopy = unmanagedVdis.find(vdi => baseCopy.parent === vdi.uuid)
+          } else {
+            iterate = false
+          }
+        }
+      })
+    }
+  )
+
   render() {
     const vdis = this._getAllVdis()
     const { newDisk } = this.state
+
+    this._setVdisByBaseCopy()
 
     return (
       <Container>

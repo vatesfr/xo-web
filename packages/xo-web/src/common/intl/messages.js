@@ -767,6 +767,10 @@ const messages = {
   srsForget: 'Forget SRs',
   srRemoveButton: 'Remove this SR',
   srNoVdis: 'No VDIs in this storage',
+
+  // ----- SR disks tab -----
+  noActiveVdi: 'No active vdi',
+
   // ----- Pool general -----
   poolTitleRamUsage: 'Pool RAM usage:',
   poolRamUsage: '{used} used of {total} ({free} free)',
