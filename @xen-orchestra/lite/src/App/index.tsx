@@ -1,11 +1,14 @@
 import Cookies from 'js-cookie'
 import React from 'react'
+import TreeView from '@material-ui/lab/TreeView'
+import TreeItem from '@material-ui/lab/TreeItem'
 import { FormattedMessage, IntlProvider } from 'react-intl'
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { Map } from 'immutable'
 import { withState } from 'reaclette'
 
 import Button from '../components/Button'
+import Icon from '../components/Icon'
 import messagesEn from '../lang/en.json'
 import Signin from './Signin/index'
 import StyleGuide from './StyleGuide/index'
@@ -116,9 +119,32 @@ const App = withState<State, Props, Effects, Computed, ParentState, ParentEffect
           <Button onClick={() => effects.disconnect()}>
             <FormattedMessage id='disconnect' />
           </Button>
+          <TreeView defaultCollapseIcon={<Icon icon='chevron-up' />} defaultExpandIcon={<Icon icon='chevron-down' />}>
+            {state.vms?.valueSeq().map((vm: Vm) => (
+              <TreeItem
+                key={vm.$id}
+                nodeId={vm.$id}
+                label={
+                  <div>
+                    <Icon icon='desktop' /> {vm.name_label}
+                  </div>
+                }
+              >
+                <TreeItem nodeId={vm.$id + 'name_label'} label={vm.name_label} />
+                <TreeItem nodeId={vm.$id + 'name_description'} label={vm.name_description} />
+                <TreeItem nodeId={vm.$id + 'name_snapshots'} label='Snapshots'>
+                  {vm.$snapshots.map((snapshot: Vm) => (
+                    <TreeItem key={snapshot.$id} nodeId={snapshot.$id} label={snapshot.name_label} />
+                  ))}
+                </TreeItem>
+              </TreeItem>
+            ))}
+          </TreeView>
           <Router>
             <Switch>
-              <Route exact path='/styleguide'><StyleGuide /></Route>
+              <Route exact path='/styleguide'>
+                <StyleGuide />
+              </Route>
               <Route exact path='/'>
                 <p>There are {state.objectsByType?.size || 0} types!</p>
                 {state.vms !== undefined && (
