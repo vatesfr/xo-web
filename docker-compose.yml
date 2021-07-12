@@ -1,0 +1,43 @@
+version: '3.4'
+services:
+  yarn:
+    build:
+      context: .
+      target: base
+    tty: true
+    container_name: xo-server
+    ports:
+    - "80:80"
+    - "443:443"
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+    - .:/xen-orchestra:cached
+    - xo-node-modules:/xen-orchestra/node_modules/
+    - xo-data:/var/lib/xo-server
+    - xo-log:/var/log
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "2"
+    depends_on:
+    - redis
+    entrypoint: yarn
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    container_name: xo-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - xo-redis-data:/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "2"
+volumes:
+  xo-redis-data: {}
+  xo-data: {}
+  xo-log: {}
+  xo-node-modules: {}

@@ -140,6 +140,15 @@ If you need to delete the service:
 forever-service delete orchestra
 ```
 
+## Running in docker
+
+You can user [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/install/) to easily develop xen-orchestra. Just use `docker-compose run yarn` instead of `yarn`, for example:
+
+```
+docker-compose run yarn
+docker-compose run yarn dev-test
+```
+
 ## Troubleshooting
 
 If you have problems during the building phase, follow these steps in your `xen-orchestra` directory:
