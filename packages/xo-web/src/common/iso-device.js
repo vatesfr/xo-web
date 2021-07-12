@@ -108,14 +108,16 @@ export default class IsoDevice extends Component {
           srPredicate={this._getSrPredicate()}
           value={mountedIso}
         />
-        <span className='input-group-btn'>
-          <ActionButton
-            disabled={isEmpty(isoSrs)}
-            handler={this._rescanIsoSrs}
-            icon='refresh'
-            tooltip={_('rescanIsoSrs')}
-          />
-        </span>
+        {!useResourceSet && (
+          <span className='input-group-btn'>
+            <ActionButton
+              disabled={isEmpty(isoSrs)}
+              handler={this._rescanIsoSrs}
+              icon='refresh'
+              tooltip={_('rescanIsoSrs')}
+            />
+          </span>
+        )}
         <span className='input-group-btn'>
           <ActionButton disabled={!mountedIso} handler={this._handleEject} icon='vm-eject' />
         </span>
