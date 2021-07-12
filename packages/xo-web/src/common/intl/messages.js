@@ -2252,9 +2252,21 @@ const messages = {
   recipesLabel: 'Recipes',
   network: 'Network',
   recipeMasterNameLabel: 'Master name',
+  recipeMasterHostNameLabel: 'Master hostname',
+  recipeMasterIpConfigLabel: 'Master IP configuration (optional)',
+  recipeMasterIpLabel: 'Master IP',
+  recipeMasterIpPrefixLabel: 'Master IP CIDR prefix',
+  recipeMasterIpGatewayLabel: 'Gateway',
+  recipeMasterIpDnsLabel: 'DNS list',
+  recipeNodeNamePatternLabel:
+    'Node name pattern (put "%" for node index in name)',
+  recipeNodeHostNamePatternLabel:
+    'Node hostname pattern (put "%" for node index in hostname)',
   recipeNumberOfNodesLabel: 'Number of nodes',
   recipeSshKeyLabel: 'SSH key',
+  recipeSizeLabel: 'Disk size',
   recipeNetworkCidr: 'Network CIDR',
+  recipeVmConfigLabel: 'Cluster VMs config',
 
   // Audit
   auditActionEvent: 'Action/Event',
