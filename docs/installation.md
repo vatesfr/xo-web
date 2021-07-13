@@ -273,6 +273,52 @@ Don't forget to start redis if you don't reboot now:
 service redis start
 ```
 
+### OpenBSD
+
+If you are using OpenBSD, you need to install these packages:
+
+```
+pkg_add gmake redis python--%2.7 git node autoconf yarn
+```
+
+A few of the npm packages look for system binaries as part of their installation, and if missing will try to build it themselves. Installing these will save some time and allow for easier upgrades later:
+
+```
+pkg_add jpeg optipng gifsicle
+```
+
+Because OpenBSD is shipped with CLANG and not GCC, you need to do this:
+
+```
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
+```
+
+You will need to update the number of allowed open files and make `node` available to `npm` :
+
+```
+ulimit -n 10240
+ln -s /usr/local/bin/node /tmp/node
+```
+
+If `yarn` cannot find Python, give it an hand :
+
+```
+PYTHON=/usr/local/bin/python2 yarn
+```
+
+Enable redis on boot with:
+
+```
+rcctl enable redis
+```
+
+Don't forget to start redis if you don't reboot now:
+
+```
+rcctl start redis
+```
+
 ### sudo
 
 If you are running `xo-server` as a non-root user, you need to use `sudo` to be able to mount NFS remotes. You can do this by editing `xo-server` configuration file and setting `useSudo = true`. It's near the end of the file:
