@@ -33,6 +33,21 @@ export interface Pool extends XapiObject {
   name_label: string
 }
 
+export interface PoolUpdate {
+  changelog: {
+    author: string
+    date: Date
+    description: string
+  }
+  description: string
+  license: string
+  name: string
+  release: string
+  size: number
+  url: string
+  version: string
+}
+
 export interface Vm extends XapiObject {
   $consoles: Array<{ protocol: string; location: string }>
   is_a_snapshot: boolean
@@ -68,7 +83,7 @@ export default class XapiConnection extends EventEmitter {
     }
     connect(): Promise<void>
     disconnect(): Promise<void>
-    call: (method: string, ...args: string[]) => Promise<unknown>
+    call: (method: string, ...args: unknown[]) => Promise<unknown>
     _objectsFetched: Promise<void>
   }
 
@@ -172,7 +187,7 @@ export default class XapiConnection extends EventEmitter {
     }
   }
 
-  call(method: string, ...args: string[]): Promise<unknown> {
+  call(method: string, ...args: unknown[]): Promise<unknown> {
     const { _xapi, connected } = this
     if (!connected || _xapi === undefined) {
       throw new Error('Not connected to XAPI')

@@ -29,6 +29,7 @@
     "eslint": "^7.21.0",
     "eslint-plugin-react": "^7.22.0",
     "html-webpack-plugin": "^5.2.0",
+    "human-format": "^0.11.0",
     "immutable": "^4.0.0-rc.12",
     "iterable-backoff": "^0.1.0",
     "json-rpc-protocol": "^0.13.1",

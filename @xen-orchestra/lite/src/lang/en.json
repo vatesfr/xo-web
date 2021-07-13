@@ -1,9 +1,11 @@
 {
+  "availableUpdates": "{ nUpdates } available update{nUpdates, plural, one {} other {s}}",
   "badCredentials": "Bad credentials",
   "confirmCtrlAltDel": "Send Ctrl+Alt+Del to VM?",
   "connect": "Connect",
   "consoleNotAvailable": "Console is only available for running VMs",
   "ctrlAltDel": "Ctrl+Alt+Del",
+  "description": "Description",
   "device": "Device",
   "disconnect": "Disconnect",
   "dns": "DNS",
@@ -11,9 +13,14 @@
   "ip": "IP",
   "loading": "Loading…",
   "login": "Login",
+  "name": "Name",
   "noData": "No data",
   "noManagementPifs": "No management PIFs found",
+  "noUpdatesAvailable": "No updates available",
   "password": "Password",
   "reconnectionAttempt": "Trying to reconnect…",
-  "rememberMe": "Remember me"
+  "release": "Release",
+  "rememberMe": "Remember me",
+  "size": "Size",
+  "version": "Version"
 }
